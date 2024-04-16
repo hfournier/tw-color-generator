@@ -1,0 +1,53 @@
+<button
+	id="btn_light_dark"
+	class="outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-users-500">
+	<svg
+		class="size-6 bg-transparent text-users-500"
+		stroke-linecap="round"
+		aria-hidden="true"
+		viewBox="0 0 24 24">
+		<mask class="origin-center" id="moon-mask">
+			<rect class="h-full w-full fill-white" x="0" y="0"></rect>
+			<circle
+				class="fill-black transition-transform duration-[250ms] ease-[cubic-bezier(0,0,0,1)] motion-reduce:transition-none dark:-translate-x-2 dark:delay-[250ms] dark:duration-500"
+				cx="25"
+				cy="10"
+				r="6"></circle>
+		</mask>
+		<circle
+			id="sun"
+			class="origin-center fill-current transition-transform duration-500 ease-[cubic-bezier(.5,1.25,.75,1.25)] motion-reduce:transition-none dark:scale-[1.75] dark:duration-500 dark:ease-[cubic-bezier(.25,0,.3,1)]"
+			cx="12"
+			cy="12"
+			r="6"
+			mask="url(#moon-mask)"></circle>
+		<g
+			class="transition-opacity duration-500 ease-[cubic-bezier(.25,0,.3,1)] motion-reduce:transition-none dark:opacity-0">
+			<g
+				class="origin-center stroke-current stroke-2 transition-transform duration-500 ease-[cubic-bezier(.5,1.5,.75,1.25)] motion-reduce:transition-none dark:-rotate-[25deg] dark:duration-150"
+				id="sun-beams">
+				<line x1="12" y1="1" x2="12" y2="3"></line>
+				<line x1="12" y1="21" x2="12" y2="23"></line>
+				<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+				<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+				<line x1="1" y1="12" x2="3" y2="12"></line>
+				<line x1="21" y1="12" x2="23" y2="12"></line>
+				<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+				<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+			</g></g
+		>
+	</svg>
+</button>
+
+<script>
+	const btn_light_dark = document.getElementById("btn_light_dark")
+	if (btn_light_dark) {
+		btn_light_dark.addEventListener("click", () => {
+			document.documentElement.classList.toggle("dark")
+			localStorage.setItem(
+				"theme",
+				document.documentElement.classList.contains("dark") ? "dark" : "light"
+			)
+		})
+	}
+</script>

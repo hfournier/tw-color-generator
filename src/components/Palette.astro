@@ -1,0 +1,460 @@
+---
+import { colorSchemes } from "@utils/colors"
+---
+
+<section>
+	<h2 class="pb-2 text-2xl font-semibold">Your Color Palette</h2>
+	<div class="flex items-center divide-x-2 py-2 dark:divide-neutral-600">
+		<div class="flex items-center gap-1 py-2">
+			<label class="flex items-center gap-2 pr-2 text-sm"
+				>Color scheme
+				<select
+					id="select_color_scheme"
+					class="border border-neutral-300 bg-white text-sm outline-none focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800">
+					{colorSchemes.map((cs) => <option value={cs}>{cs}</option>)}
+				</select>
+			</label>
+		</div>
+		<div class="flex items-center gap-1 py-2">
+			<label class="flex items-center gap-1 px-2 text-sm"
+				><input
+					id="ck_grayish"
+					class="text-users-500 outline-none focus:ring-2 focus:ring-users-500 focus:ring-offset-2 focus:ring-offset-neutral-50 dark:bg-neutral-800 dark:focus:ring-offset-neutral-950"
+					type="checkbox"
+					checked
+				/>include Gray-ish</label
+			>
+			<label class="flex items-center gap-2 px-2 text-sm"
+				>Saturation<input
+					id="rg_grayish_saturation"
+					class="h-3 appearance-none rounded-sm border border-neutral-300 bg-gradient-to-r from-users-s1 to-users-s15 accent-users-500 outline-none focus:ring-2 focus:ring-users-500 focus:ring-offset-2 focus:ring-offset-neutral-50 dark:border-neutral-600 dark:focus:ring-offset-neutral-950"
+					type="range"
+					title="Percent(1 - 15%) saturation of primary color\nA lower number will produce a more neutral gray"
+					min="0.01"
+					max="0.15"
+					step="any"
+					value="0.1"
+				/></label
+			>
+			<label class="hidden items-center gap-2 px-2 text-sm"
+				>B&W offset<input
+					id="rg_grayish_bw_offset"
+					class="h-3 appearance-none rounded-sm border border-neutral-300 bg-gradient-to-r from-users-s1 to-users-s15 accent-users-500 outline-none focus:ring-2 focus:ring-users-500 focus:ring-offset-2 focus:ring-offset-neutral-50 dark:border-neutral-600 dark:focus:ring-offset-neutral-950"
+					type="range"
+					title="Percent(1 - 5%) offset from 50/50 gray of primary color\nA lower number will produce a more neutral gray"
+					min="0.01"
+					max="0.05"
+					step="any"
+					value="0.02"
+				/></label
+			>
+		</div>
+	</div>
+	<hr class="dark:border-neutral-600" />
+	<div id="colorPalette" class="grid grid-cols-5 gap-1 py-4">
+		<div class="flex flex-col gap-2">
+			<label class="hidden items-center justify-center gap-2 text-sm"
+				>Name
+				<input
+					class="w-3/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+					type="text"
+					placeholder="color1"
+				/>
+			</label>
+			<ul class="flex flex-col gap-1"></ul>
+		</div>
+		<div class="flex flex-col gap-2">
+			<label class="hidden items-center justify-center gap-2 text-sm"
+				>Name
+				<input
+					class="w-3/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+					type="text"
+					placeholder="color2"
+				/>
+			</label>
+			<ul class="flex flex-col gap-1"></ul>
+		</div>
+		<div class="flex flex-col gap-2">
+			<label class="hidden items-center justify-center gap-2 text-sm"
+				>Name
+				<input
+					class="w-3/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+					type="text"
+					placeholder="color3"
+				/>
+			</label>
+			<ul class="flex flex-col gap-1"></ul>
+		</div>
+		<div class="flex flex-col gap-2">
+			<label class="hidden items-center justify-center gap-2 text-sm"
+				>Name
+				<input
+					class="w-3/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+					type="text"
+					placeholder="color4"
+				/>
+			</label>
+			<ul class="flex flex-col gap-1"></ul>
+		</div>
+		<div class="flex flex-col gap-2">
+			<label class="hidden items-center justify-center gap-2 text-sm"
+				>Name
+				<input
+					class="w-3/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+					type="text"
+					placeholder="color5"
+				/>
+			</label>
+			<ul class="flex flex-col gap-1"></ul>
+		</div>
+	</div>
+</section>
+
+<script>
+	import {
+		formatColor,
+		getColorShades,
+		getCurrentColor500,
+		type ColorSchemeTypes,
+		type LightnessColorSpaceTypes,
+		getShades,
+		type ColorSpaceTypes,
+		getColorMixOptions
+	} from "@utils/colors"
+	import { formatCss, formatHex, hsl, type Hsl } from "culori"
+
+	/**
+	 * Updates the color palette based on the provided radio palette input.
+	 *
+	 * @param {HTMLInputElement} rdoPalette - The radio palette input.
+	 */
+	const updatePalette = (rdoPalette?: HTMLInputElement) => {
+		if (!rdoPalette) {
+			const rdo_palettes = document.getElementsByName("rdo_palette")
+			if (rdo_palettes) {
+				for (const input of rdo_palettes) {
+					if ((input as HTMLInputElement).checked) {
+						rdoPalette = input as HTMLInputElement
+					}
+				}
+			}
+		}
+
+		if (rdoPalette) {
+			const section = rdoPalette.parentElement?.parentElement!
+			const selects = section.getElementsByTagName("select")
+			const selectedCS = selects[0].options[selects[0].selectedIndex]
+				.value as LightnessColorSpaceTypes
+			const selectedHim =
+				selects.length === 2 ? selects[1].options[selects[1].selectedIndex].value : undefined
+			const ul = section.getElementsByTagName("ul")[0]
+			const colorPalette = document.getElementById("colorPalette") as HTMLDivElement
+			const ul_palettes = colorPalette?.getElementsByTagName("ul")
+			const currentColor500 = getCurrentColor500()
+
+			const select_color_scheme = document.getElementById(
+				"select_color_scheme"
+			) as HTMLSelectElement
+			const selectedColorScheme = select_color_scheme.options[select_color_scheme.selectedIndex]
+				.value as ColorSchemeTypes
+
+			if (selectedCS === "hwb") {
+				rg_grayish_saturation.parentElement?.classList.remove("flex")
+				rg_grayish_saturation.parentElement?.classList.add("hidden")
+				rg_grayish_bw_offset.parentElement?.classList.remove("hidden")
+				rg_grayish_bw_offset.parentElement?.classList.add("flex")
+			} else {
+				rg_grayish_saturation.parentElement?.classList.remove("hidden")
+				rg_grayish_saturation.parentElement?.classList.add("flex")
+				rg_grayish_bw_offset.parentElement?.classList.remove("flex")
+				rg_grayish_bw_offset.parentElement?.classList.add("hidden")
+			}
+
+			if (colorPalette) {
+				let i = 0
+				for (const ul_palette of ul_palettes!) {
+					ul_palette.innerHTML = ""
+				}
+				// primary color
+				ul_palettes![i].previousElementSibling?.classList.replace("hidden", "flex")
+				if (section.dataset.csType === "cs") {
+					ul_palettes![i++].innerHTML =
+						getColorShades(currentColor500, selectedCS)
+							.map((colorShade) => {
+								return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
+							})
+							.join("\n") + "\n"
+				} else {
+					ul_palettes![i++].innerHTML =
+						getShades(getColorMixOptions()[selectedCS as ColorSpaceTypes])
+							.map((colorShade) => {
+								if (selectedHim !== undefined) {
+									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+								} else {
+									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS}, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+								}
+							})
+							.join("\n") + "\n"
+				}
+
+				let color2, color3, color4: Hsl | undefined
+				let compHue, compOffset
+				switch (selectedColorScheme) {
+					case "complimentary":
+						color2 = hsl(currentColor500)!
+						compHue = color2.h! + 180
+						if (compHue > 360) {
+							compHue = compHue - 360
+						}
+						color2.h = compHue
+
+						break
+
+					case "split-complimentary":
+						compOffset = 150
+						color2 = hsl(currentColor500)!
+						compHue = color2.h! + compOffset
+						if (compHue > 360) {
+							compHue = compHue - 360
+						}
+						color2.h = compHue
+
+						color3 = hsl(currentColor500)!
+						compHue = color3.h! - compOffset
+						if (compHue < 0) {
+							compHue = 360 - compHue
+						}
+						color3.h = compHue
+
+						break
+
+					case "analogous":
+						compOffset = 40
+						color2 = hsl(currentColor500)!
+						compHue = color2.h! + compOffset
+						if (compHue > 360) {
+							compHue = compHue - 360
+						}
+						color2.h = compHue
+
+						color3 = hsl(currentColor500)!
+						compHue = color3.h! - compOffset
+						if (compHue < 0) {
+							compHue = 360 - compHue
+						}
+						color3.h = compHue
+
+						break
+
+					case "triadic":
+						compOffset = 120
+						color2 = hsl(currentColor500)!
+						compHue = color2.h! + compOffset
+						if (compHue > 360) {
+							compHue = compHue - 360
+						}
+						color2.h = compHue
+
+						color3 = hsl(currentColor500)!
+						compHue = color3.h! - compOffset
+						if (compHue < 0) {
+							compHue = 360 - compHue
+						}
+						color3.h = compHue
+
+						break
+
+					case "tetradic":
+						compOffset = 30
+						color2 = hsl(currentColor500)!
+						compHue = color2.h! + compOffset
+						if (compHue > 360) {
+							compHue = compHue - 360
+						}
+						color2.h = compHue
+
+						compOffset = 180
+						color3 = hsl(currentColor500)!
+						compHue = color3.h! + compOffset
+						if (compHue > 360) {
+							compHue = compHue - 360
+						}
+						color3.h = compHue
+
+						compOffset = 210
+						color4 = hsl(currentColor500)!
+						compHue = color4.h! + compOffset
+						if (compHue > 360) {
+							compHue = compHue - 360
+						}
+						color4.h = compHue
+
+						break
+
+					case "square":
+						compOffset = 90
+						color2 = hsl(currentColor500)!
+						compHue = color2.h! + compOffset
+						if (compHue > 360) {
+							compHue = compHue - 360
+						}
+						color2.h = compHue
+
+						compOffset = 180
+						color3 = hsl(currentColor500)!
+						compHue = color3.h! + compOffset
+						if (compHue > 360) {
+							compHue = compHue - 360
+						}
+						color3.h = compHue
+
+						compOffset = 270
+						color4 = hsl(currentColor500)!
+						compHue = color4.h! + compOffset
+						if (compHue > 360) {
+							compHue = compHue - 360
+						}
+						color4.h = compHue
+
+						break
+
+					default:
+						break
+				}
+
+				if (color2) {
+					ul_palettes![i].previousElementSibling?.classList.replace("hidden", "flex")
+					if (section.dataset.csType === "cs") {
+						ul_palettes![i++].innerHTML =
+							getColorShades(formatHex(color2), selectedCS)
+								.map((colorShade) => {
+									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
+								})
+								.join("\n") + "\n"
+					} else {
+						ul_palettes![i++].innerHTML =
+							getShades(getColorMixOptions()[selectedCS as ColorSpaceTypes])
+								.map((colorShade) => {
+									if (selectedHim !== undefined) {
+										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+									} else {
+										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS}, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+									}
+								})
+								.join("\n") + "\n"
+					}
+				}
+
+				if (color3) {
+					ul_palettes![i].previousElementSibling?.classList.replace("hidden", "flex")
+					if (section.dataset.csType === "cs") {
+						ul_palettes![i++].innerHTML =
+							getColorShades(formatHex(color3), selectedCS)
+								.map((colorShade) => {
+									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
+								})
+								.join("\n") + "\n"
+					} else {
+						ul_palettes![i++].innerHTML =
+							getShades(getColorMixOptions()[selectedCS as ColorSpaceTypes])
+								.map((colorShade) => {
+									if (selectedHim !== undefined) {
+										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+									} else {
+										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS}, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+									}
+								})
+								.join("\n") + "\n"
+					}
+				}
+
+				if (color4) {
+					ul_palettes![i].previousElementSibling?.classList.replace("hidden", "flex")
+					if (section.dataset.csType === "cs") {
+						ul_palettes![i++].innerHTML =
+							getColorShades(formatHex(color4), selectedCS)
+								.map((colorShade) => {
+									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
+								})
+								.join("\n") + "\n"
+					} else {
+						ul_palettes![i++].innerHTML =
+							getShades(getColorMixOptions()[selectedCS as ColorSpaceTypes])
+								.map((colorShade) => {
+									if (selectedHim !== undefined) {
+										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+									} else {
+										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS}, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+									}
+								})
+								.join("\n") + "\n"
+					}
+				}
+
+				if (ck_grayish.checked) {
+					ul_palettes![i].previousElementSibling?.classList.replace("hidden", "flex")
+					// grayish color
+					const grayishColor500 = hsl(currentColor500)!
+					grayishColor500.s = +rg_grayish_saturation.value
+					if (section.dataset.csType === "cs") {
+						ul_palettes![i++].innerHTML =
+							getColorShades(
+								formatHex(grayishColor500),
+								selectedCS,
+								true,
+								selectedCS === "hwb" ? +rg_grayish_bw_offset.value : undefined
+							)
+								.map((colorShade) => {
+									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
+								})
+								.join("\n") + "\n"
+					} else {
+						ul_palettes![i++].innerHTML =
+							getShades(getColorMixOptions()[selectedCS as ColorSpaceTypes])
+								.map((colorShade) => {
+									if (selectedHim !== undefined) {
+										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+									} else {
+										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS}, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+									}
+								})
+								.join("\n") + "\n"
+					}
+				}
+				// hide extra column name inputs
+				for (let index = i; index <= 5; index++) {
+					ul_palettes![index].previousElementSibling?.classList.replace("flex", "hidden")
+				}
+			}
+		}
+	}
+
+	const rdo_palettes = document.getElementsByName("rdo_palette")
+	if (rdo_palettes) {
+		for (const input of rdo_palettes) {
+			input.addEventListener("change", (e) => {
+				updatePalette(e.target as HTMLInputElement)
+			})
+		}
+	}
+
+	const select_color_scheme = document.getElementById("select_color_scheme") as HTMLSelectElement
+	select_color_scheme.addEventListener("change", () => {
+		updatePalette()
+	})
+
+	const ck_grayish = document.getElementById("ck_grayish") as HTMLInputElement
+	ck_grayish.addEventListener("change", () => {
+		updatePalette()
+	})
+
+	const rg_grayish_saturation = document.getElementById("rg_grayish_saturation") as HTMLInputElement
+	rg_grayish_saturation.addEventListener("change", () => {
+		updatePalette()
+	})
+
+	const rg_grayish_bw_offset = document.getElementById("rg_grayish_bw_offset") as HTMLInputElement
+	rg_grayish_bw_offset.addEventListener("change", () => {
+		updatePalette()
+	})
+</script>

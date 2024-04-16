@@ -1,0 +1,141 @@
+---
+import colorMixOptions from "@data/color-mix-options.json"
+import { defaultColors, getShades, HueInterpolationMethods, PolarColorSpaces } from "@utils/colors"
+import { round } from "culori"
+import ShadeColumn from "./ShadeColumn.astro"
+
+type Props = {
+	id: "1" | "2"
+}
+const { id } = Astro.props
+const default_pcs = id === "1" ? defaultColors.pcs_1 : defaultColors.pcs_2
+const default_pcs_him = "shorter"
+const colorShades = getShades(colorMixOptions[default_pcs])
+const cmo = colorMixOptions[default_pcs]
+const round0 = round(0)
+---
+
+<ShadeColumn
+	{id}
+	csType="pcs"
+	title="Polar Color Spaces"
+	subTitle="using color-mix() to add white/black"
+	defaultCs={default_pcs}
+	colorOptions={cmo}>
+	<Fragment slot="csOptions">
+		{
+			PolarColorSpaces.map((pcs) => (
+				<option selected={pcs === default_pcs ? true : null}>{pcs}</option>
+			))
+		}
+	</Fragment>
+	<Fragment slot="himOptions">
+		{HueInterpolationMethods.map((him) => <option>{him}</option>)}
+	</Fragment>
+	<Fragment slot="shadeItmes">
+		{
+			colorShades.map((colorShade) => (
+				<li
+					class:list={[
+						"flex aspect-[5/1] items-center justify-center",
+						{ "text-black": colorShade.shade < 400 },
+						{ "text-white": colorShade.shade >= 400 }
+					]}
+					style={`background-color: color-mix(in ${default_pcs} ${default_pcs_him} hue, ${defaultColors.hex}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)`}
+					title={`color-mix(in ${default_pcs} ${default_pcs_him} hue, ${defaultColors.hex}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? round0(colorShade.w * 100) : round0(colorShade.b * 100)}%)`}>
+					{colorShade.shade}
+				</li>
+			))
+		}
+	</Fragment>
+</ShadeColumn>
+
+<script>
+	import {
+		getColorMixOptions,
+		getCurrentColor500,
+		updateColorMixOptions,
+		updateMixes,
+		type PolarColorSpaceTypes,
+		type HueInterpolationMethodTypes
+	} from "@utils/colors"
+
+	const shadeCols = document.querySelectorAll<HTMLElement>('[data-cs-type="pcs"]')
+	if (shadeCols) {
+		for (const shadeCol of shadeCols) {
+			const selects = shadeCol.getElementsByTagName("select")
+			const ul = shadeCol.getElementsByTagName("ul")[0]
+			const inputs = shadeCol.getElementsByTagName("input")
+
+			updateColorMixOptions(
+				selects[0].options[selects[0].selectedIndex].value as PolarColorSpaceTypes,
+				inputs[0],
+				inputs[1]
+			)
+
+			selects[0].addEventListener("change", () => {
+				updateMixes(
+					getCurrentColor500(),
+					ul,
+					selects[0].options[selects[0].selectedIndex].value as PolarColorSpaceTypes,
+					selects[1].options[selects[1].selectedIndex].value as HueInterpolationMethodTypes
+				)
+				updateColorMixOptions(
+					selects[0].options[selects[0].selectedIndex].value as PolarColorSpaceTypes,
+					inputs[0],
+					inputs[1]
+				)
+				// unselect palette radio button
+				inputs[2].checked = false
+			})
+
+			selects[1].addEventListener("change", () => {
+				updateMixes(
+					getCurrentColor500(),
+					ul,
+					selects[0].options[selects[0].selectedIndex].value as PolarColorSpaceTypes,
+					selects[1].options[selects[1].selectedIndex].value as HueInterpolationMethodTypes
+				)
+				// unselect palette radio button
+				inputs[2].checked = false
+			})
+
+			inputs[0].addEventListener("input", (e) => {
+				if (inputs[0].checkValidity()) {
+					const cmo = getColorMixOptions()
+					cmo[
+						selects[0].options[selects[0].selectedIndex].value as PolarColorSpaceTypes
+					].light.step = (e.target as HTMLInputElement).valueAsNumber
+					localStorage.setItem("cmOptions", JSON.stringify(cmo))
+
+					updateMixes(
+						getCurrentColor500(),
+						ul,
+						selects[0].options[selects[0].selectedIndex].value as PolarColorSpaceTypes,
+						selects[1].options[selects[1].selectedIndex].value as HueInterpolationMethodTypes
+					)
+				}
+			})
+
+			inputs[1].addEventListener("input", (e) => {
+				if (inputs[1].checkValidity()) {
+					const cmo = getColorMixOptions()
+					cmo[
+						selects[0].options[selects[0].selectedIndex].value as PolarColorSpaceTypes
+					].dark.step = (e.target as HTMLInputElement).valueAsNumber
+					localStorage.setItem("cmOptions", JSON.stringify(cmo))
+
+					updateMixes(
+						getCurrentColor500(),
+						ul,
+						selects[0].options[selects[0].selectedIndex].value as PolarColorSpaceTypes,
+						selects[1].options[selects[1].selectedIndex].value as HueInterpolationMethodTypes
+					)
+				}
+			})
+
+			// palette radio button value
+			inputs[2].value = selects[0].options[selects[0].selectedIndex].value as PolarColorSpaceTypes
+		}
+	}
+</script>

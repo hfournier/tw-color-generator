@@ -1,0 +1,207 @@
+---
+import { round } from "culori"
+import { defaultColors } from "@utils/colors"
+
+const round0 = round(0)
+---
+
+<section class="flex items-center divide-x-2 dark:divide-neutral-600">
+	<label class="flex items-center gap-2 pr-3"
+		><div class="text-sm">Select a color</div>
+		<input
+			id="input_colorPicker"
+			type="color"
+			title="Pick me! Pick me!"
+			class="size-8 rounded-sm bg-transparent outline-none focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-users-500"
+			value={defaultColors.hex}
+		/>
+	</label>
+	<label class="flex items-center gap-2 px-3">
+		<div class="text-sm">Hex</div>
+		<input
+			id="input_colorHex"
+			class="w-20 border-0 border-b-2 border-neutral-300 p-1 text-center outline-none selection:bg-users-500 selection:text-white invalid:border-2 invalid:border-red-500 focus:border-2 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+			type="text"
+			title="Go ahead and Paste me!"
+			pattern="#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})"
+			value={defaultColors.hex}
+		/>
+	</label>
+	<div class="flex items-center gap-3 px-3">
+		<label class="flex items-center gap-2">
+			<div class="text-center text-sm">Hue (deg)</div>
+			<input
+				id="input_colorHsl_h"
+				class="w-10 border-0 border-b-2 border-neutral-300 p-1 text-center invalid:border-red-500 disabled:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-300"
+				type="text"
+				min="0"
+				max="360"
+				disabled
+				value={round0(defaultColors.hsl.h)}
+			/>
+		</label>
+		<label class="flex items-center gap-2">
+			<div class="text-center text-sm">Saturation (%)</div>
+			<input
+				id="input_colorHsl_s"
+				class="w-10 border-0 border-b-2 border-neutral-300 p-1 text-center invalid:border-red-500 disabled:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-300"
+				type="text"
+				min="0"
+				max="100"
+				disabled
+				value={round0(defaultColors.hsl.s * 100)}
+			/>
+		</label>
+		<label class="flex items-center gap-2">
+			<div class="text-center text-sm">Lightness (%)</div>
+			<input
+				id="input_colorHsl_l"
+				class="w-10 border-0 border-b-2 border-neutral-300 p-1 text-center invalid:border-red-500 disabled:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-300"
+				type="text"
+				min="0"
+				max="100"
+				disabled
+				value={round0(defaultColors.hsl.l * 100)}
+			/>
+		</label>
+	</div>
+	<div class="px-3">
+		<button
+			id="btn_reset"
+			type="button"
+			class="rounded-sm bg-users-500 px-3 py-1 font-medium text-white hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-users-500"
+			>Reset</button
+		>
+	</div>
+	<div id="errorMsg" class="px-3 text-red-500"></div>
+</section>
+<hr class="hidden group-[.hide-instructions]/instructions:block dark:border-neutral-600" />
+
+<script>
+	import { formatHex, round, hsl } from "culori"
+	import {
+		updateShades,
+		type RectangularColorSpaceTypes,
+		type PolarColorSpaceTypes,
+		type HueInterpolationMethodTypes,
+		type LightnessColorSpaceTypes,
+		updateMixes,
+		getNearestTwHue,
+		updateTwColors
+	} from "@utils/colors"
+
+	const round0 = round(0)
+
+	const form_color = document.getElementById("form_color") as HTMLFormElement
+	const input_colorPicker = document.getElementById("input_colorPicker") as HTMLInputElement
+	const input_colorHex = document.getElementById("input_colorHex") as HTMLInputElement
+	const input_colorHsl_h = document.getElementById("input_colorHsl_h") as HTMLInputElement
+	const input_colorHsl_s = document.getElementById("input_colorHsl_s") as HTMLInputElement
+	const input_colorHsl_l = document.getElementById("input_colorHsl_l") as HTMLInputElement
+
+	const div_errorMsg = document.getElementById("errorMsg") as HTMLDivElement
+
+	const btn_reset = document.getElementById("btn_reset") as HTMLButtonElement
+
+	let colorHex_l_50 = input_colorPicker.value
+
+	/**
+	 * When the color picker changes, update all the colors
+	 */
+	input_colorPicker.addEventListener("change", (e) => updateColor(e.target as HTMLInputElement))
+	input_colorHex.addEventListener("input", (e) => updateColor(e.target as HTMLInputElement))
+
+	/**
+	 * When something is pasted in colorHex, verify that it's a valid hex color and update all the colors
+	 */
+	input_colorHex.addEventListener("paste", (e: ClipboardEvent) => {
+		e.preventDefault()
+		let clipboardText = e.clipboardData?.getData("text/plain")
+		if (!clipboardText?.startsWith("#")) {
+			clipboardText = `#${clipboardText}`
+		}
+		const match = clipboardText?.match(/#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/)
+		if (match) {
+			input_colorPicker.value = clipboardText
+			updateColor(input_colorPicker as HTMLInputElement)
+		} else {
+			alert("Invalid color code. Only valid hex color codes ('#000000') are accepted.")
+		}
+	})
+
+	/**
+	 * When the reset button is clicked, reset the form and update all the colors
+	 */
+	btn_reset.addEventListener("click", (e) => {
+		form_color.reset()
+		updateColor(input_colorPicker)
+	})
+
+	/**
+	 * When the color is changed, update all the elements with the new color
+	 * @param input The \<input /\> element that triggered the update
+	 */
+	const updateColor = (input: HTMLInputElement) => {
+		if (input.checkValidity()) {
+			div_errorMsg.innerText = ""
+			input_colorHex.value = input.value
+			const hslColor = hsl(input.value)
+			if (hslColor) {
+				const tw = getNearestTwHue(hslColor.h!)
+				const select_tw_1 = document.getElementById("select_tw_1") as HTMLSelectElement
+				select_tw_1.value = tw.name
+				updateTwColors()
+
+				input_colorHsl_h.value = round0(hslColor.h!).toString()
+				input_colorHsl_s.value = round0(hslColor.s! * 100).toString()
+				input_colorHsl_l.value = round0(hslColor.l! * 100).toString()
+
+				hslColor.l = 0.5
+				colorHex_l_50 = formatHex(hslColor) as string
+				document.body.setAttribute(
+					"style",
+					`--color-users-500: ${hslColor.h}deg ${hslColor.s * 100}% ${hslColor.l * 100}%; --color-users-s1: ${hslColor.h}deg ${1}% ${hslColor.l * 100}%; --color-users-s15: ${hslColor.h}deg ${15}% ${hslColor.l * 100}%;`
+				)
+
+				const shadeCols = document.querySelectorAll<HTMLElement>("[data-cs-type]")
+				if (shadeCols) {
+					for (const shadeCol of shadeCols) {
+						const selects = shadeCol.getElementsByTagName("select")
+						const ul = shadeCol.getElementsByTagName("ul")[0]
+						switch (shadeCol.dataset.csType) {
+							case "cs":
+								updateShades(
+									colorHex_l_50,
+									ul,
+									selects[0].options[selects[0].selectedIndex].value as LightnessColorSpaceTypes
+								)
+								break
+
+							case "rcs":
+								updateMixes(
+									colorHex_l_50,
+									ul,
+									selects[0].options[selects[0].selectedIndex].value as RectangularColorSpaceTypes
+								)
+								break
+
+							case "pcs":
+								updateMixes(
+									colorHex_l_50,
+									ul,
+									selects[0].options[selects[0].selectedIndex].value as PolarColorSpaceTypes,
+									selects[1].options[selects[1].selectedIndex].value as HueInterpolationMethodTypes
+								)
+								break
+
+							default:
+								break
+						}
+					}
+				}
+			}
+		} else {
+			div_errorMsg.innerText = "Invalid Color input"
+		}
+	}
+</script>

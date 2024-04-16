@@ -1,0 +1,40 @@
+---
+import { type ColorSpaceTypes } from "@utils/colors"
+
+type Props = {
+	cs: ColorSpaceTypes
+	id: string
+	mode: "light" | "dark"
+	min: number
+	max: number
+	value: number
+	class?: string
+}
+const { cs, id, mode, min, max, value, class: classes } = Astro.props
+const label =
+	cs === "hwb" || id.startsWith("p") || id.startsWith("r")
+		? mode === "light"
+			? "Whiten"
+			: "Blacken"
+		: mode === "light"
+			? "Lighten"
+			: "Darken"
+const title = `${label} each shade incrementally from 500 to ${mode === "light" ? "50" : "950"}`
+---
+
+<label class:list={["mx-2 py-2", classes]} for=`input_${mode}_${id}`>
+	<input
+		id=`input_${mode}_${id}`
+		class:list={[
+			"dark: h-3 w-full appearance-none rounded-sm border border-neutral-300 bg-gradient-to-r from-users-500 outline-none focus:ring-2 focus:ring-users-500 focus:ring-offset-2 focus:ring-offset-neutral-50 dark:border-neutral-600 dark:focus:ring-offset-neutral-950",
+			{ "to-white": mode === "light" },
+			{ "to-black": mode === "dark" }
+		]}
+		type="range"
+		{min}
+		{max}
+		step="any"
+		{title}
+		{value}
+	/>
+</label>

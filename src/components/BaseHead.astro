@@ -1,0 +1,36 @@
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="generator" content={Astro.generator} />
+	<title>Color Generator for TailwindCSS</title>
+	<meta
+		name="description"
+		content="Color generator for TailwindCSS that allows you generate all the needed shades of any color using various color spaces like hsl, hwb, oklab, oklch, and more."
+	/>
+	<script type="module">
+		const theme = localStorage.getItem("theme")
+		if (theme) {
+			document.documentElement.classList.replace(
+				"changeThemeClass",
+				theme === "dark" ? "dark" : null
+			)
+		} else {
+			if (document.documentElement.classList.contains("changeThemeClass")) {
+				if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+					document.documentElement.classList.replace("changeThemeClass", "dark")
+				} else {
+					document.documentElement.classList.remove("changeThemeClass")
+				}
+			}
+		}
+
+		const hideInstructions = localStorage.getItem("hideInstructions")
+		if (hideInstructions === "true") {
+			const body = document.body
+			if (body) {
+				body.classList.add("hide-instructions")
+			}
+		}
+	</script>
+</head>

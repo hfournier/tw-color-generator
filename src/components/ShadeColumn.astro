@@ -1,0 +1,88 @@
+---
+import { Icon } from "astro-icon/components"
+import ShadeAdjuster from "./ShadeAdjuster.astro"
+import type { ColorSpaceTypes, ShadeOptions } from "@utils/colors"
+
+type Props = {
+	id: "1" | "2"
+	csType: "tw" | "cs" | "pcs" | "rcs"
+	title: string
+	subTitle: string
+	defaultCs?: ColorSpaceTypes
+	colorOptions?: ShadeOptions
+}
+const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
+---
+
+{
+	id === "1" && (
+		<div
+			class:list={[
+				"border-b border-neutral-300 text-center dark:border-neutral-600",
+				{ "col-span-2": csType !== "tw" }
+			]}>
+			<div class="font-bold">{title}</div>
+			<div class="text-sm">{subTitle}</div>
+		</div>
+	)
+}
+<div data-cs-type={csType ? csType : null} class="row-span-6 grid grid-rows-subgrid gap-1">
+	<select
+		id=`select_${csType}_${id}`
+		class="border border-neutral-300 bg-white py-1.5 outline-none focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800">
+		<slot name="csOptions" />
+	</select>
+	{
+		csType === "pcs" && (
+			<select
+				id={`select_${csType}_${id}_him`}
+				class="border border-neutral-300 bg-white py-1.5 outline-none focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800">
+				<slot name="himOptions" />
+			</select>
+		)
+	}
+	{
+		csType !== "tw" && (
+			<ShadeAdjuster
+				class="row-start-3"
+				cs={defaultCs!}
+				id={`${csType}_${id}`}
+				mode="light"
+				min={colorOptions!.light.min * 100}
+				max={colorOptions!.light.max * 100}
+				value={colorOptions!.light.step * 100}
+			/>
+		)
+	}
+	<ul id=`ul_${csType}_${id}` class="row-start-4 flex flex-col gap-1">
+		<slot name="shadeItmes" />
+	</ul>
+	{
+		csType !== "tw" && (
+			<ShadeAdjuster
+				class="row-start-5"
+				cs={defaultCs!}
+				id={`${csType}_${id}`}
+				mode="dark"
+				min={colorOptions!.dark.min * 100}
+				max={colorOptions!.dark.max * 100}
+				value={colorOptions!.dark.step * 100}
+			/>
+		)
+	}
+	{
+		csType !== "tw" && (
+			<label class="row-start-6 flex justify-center" title="Copy this color space to your palette">
+				<input
+					id={`rdo_palette_${csType}_${id}`}
+					class="peer hidden"
+					type="radio"
+					name="rdo_palette"
+					value={defaultCs}
+				/>
+				<Icon class="size-8 text-users-500 peer-checked:hidden" name="mdi:palette-outline" />
+				<Icon class="hidden size-8 text-users-500 peer-checked:block" name="mdi:palette" />
+			</label>
+		)
+	}
+</div>

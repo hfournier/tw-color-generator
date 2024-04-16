@@ -1,0 +1,7 @@
+export const DEFAULT_COLOR = "#f97316"
+export const DEFAULT_COLOR_SPACE_1 = "hwb"
+export const DEFAULT_COLOR_SPACE_2 = "hsl"
+export const DEFAULT_POLAR_COLOR_SPACE_1 = "hwb"
+export const DEFAULT_POLAR_COLOR_SPACE_2 = "oklch"
+export const DEFAULT_RECTANGLE_COLOR_SPACE_1 = "srgb"
+export const DEFAULT_RECTANGLE_COLOR_SPACE_2 = "oklab"

@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--color-users-500: 25deg 95% 50%;
+		--color-users-s1: 25deg 1% 50%;
+		--color-users-s15: 25deg 15% 50%;
+
+		--color-code-char: #22863a;
+		--color-code-comment: #6a737d;
+		--color-code-cssvar: #e36209;
+		--color-code-entity: #6f42c1;
+		--color-code-keyword: #d73a49;
+		--color-code-number: #005cc5;
+		--color-code-property: #005cc5;
+		--color-code-punctuation: #24292e;
+		--color-code-string: #032f62;
+		--color-code-value: #b31d28;
+		--color-code-variable: #24292e;
+	}
+
+	.dark {
+		--color-code-char: #85e89d;
+		--color-code-comment: #6a737d;
+		--color-code-cssvar: #ffab70;
+		--color-code-entity: #b392f0;
+		--color-code-keyword: #f97583;
+		--color-code-number: #79b8ff;
+		--color-code-property: #79b8ff;
+		--color-code-punctuation: #e1e4e8;
+		--color-code-string: #9ecbff;
+		--color-code-value: #fdaeb7;
+		--color-code-variable: #e1e4e8;
+	}
+
+	.scrollable::-webkit-scrollbar {
+		@apply h-2 w-2 bg-neutral-200 dark:bg-neutral-800;
+	}
+	.scrollable::-webkit-scrollbar-track {
+		@apply my-1 rounded-full bg-neutral-200 dark:bg-neutral-800;
+	}
+	.scrollable::-webkit-scrollbar-thumb {
+		@apply rounded-full bg-neutral-400 hover:bg-neutral-500 dark:bg-neutral-600 dark:hover:bg-neutral-500;
+	}
+	.dark .scrollable::-webkit-scrollbar {
+		@apply bg-neutral-800;
+	}
+	.dark .scrollable::-webkit-scrollbar-track {
+		@apply bg-neutral-800;
+	}
+	.dark .scrollable::-webkit-scrollbar-thumb {
+		@apply bg-neutral-600 hover:bg-neutral-500;
+	}
+	@supports (scrollbar-color: darkgray lightgray) {
+		.scrollable {
+			scrollbar-width: thin;
+			scrollbar-color: theme(colors.neutral.200) theme(colors.neutral.400);
+		}
+		.dark.scrollable,
+		.dark .scrollable {
+			scrollbar-color: theme(colors.neutral.800) theme(colors.neutral.600);
+		}
+	}
+
+	input[type="range"]::-webkit-slider-thumb {
+		appearance: none;
+		background-color: transparent;
+		border: 3px solid theme(colors.neutral.200);
+		border-radius: 2px;
+		box-shadow:
+			0 0 1px 1px theme(colors.neutral.400),
+			inset 0 0 1px 1px theme(colors.neutral.400);
+		cursor: pointer;
+		height: 1.5rem;
+		width: 0.75rem;
+	}
+	.dark input[type="range"]::-webkit-slider-thumb {
+		border: 3px solid theme(colors.neutral.800);
+	}
+
+	input[type="range"]::-moz-range-thumb {
+		appearance: none;
+		background-color: transparent;
+		border: 3px solid theme(colors.neutral.300);
+		border-radius: 2px;
+		box-shadow:
+			0 0 1px 1px theme(colors.neutral.400),
+			inset 0 0 1px 1px theme(colors.neutral.400);
+		cursor: pointer;
+		height: 1.15rem;
+		width: 0.4rem;
+	}
+	.dark input[type="range"]::-moz-range-thumb {
+		border: 3px solid theme(colors.neutral.800);
+	}
+}

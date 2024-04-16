@@ -1,0 +1,262 @@
+---
+import { getTw3Code, getTw3CodeCss } from "@utils/code"
+---
+
+<section class="">
+	<h2 class="pb-2 text-2xl font-semibold">Your Code Snippets</h2>
+	<div class="flex items-center divide-x-2 py-2 dark:divide-neutral-600">
+		<div class="flex items-center gap-1 py-2">
+			<label class="flex items-center gap-2 pr-2 text-sm"
+				>Tailwind
+				<select
+					id="select_tw_version"
+					class="border border-neutral-300 bg-white text-sm outline-none focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800">
+					<option value="v3">Version 3.x</option>
+					<option value="v4">Version 4.x</option>
+				</select>
+			</label>
+			<label class="flex items-center gap-1 px-2 text-sm"
+				><input
+					id="ck_extend"
+					class="text-users-500 outline-none focus:ring-2 focus:ring-users-500 focus:ring-offset-2 focus:ring-offset-neutral-50 dark:bg-neutral-800 dark:focus:ring-offset-neutral-950"
+					type="checkbox"
+					checked
+				/>Extend</label
+			>
+			<label class="flex items-center gap-1 px-2 text-sm has-[:disabled]:opacity-40"
+				><input
+					id="ck_use_vars"
+					class="text-users-500 outline-none focus:ring-2 focus:ring-users-500 focus:ring-offset-2 focus:ring-offset-neutral-50 dark:bg-neutral-800 dark:focus:ring-offset-neutral-950"
+					type="checkbox"
+				/>Use CSS vars</label
+			>
+		</div>
+		<label class="flex items-center gap-2 px-2 text-sm"
+			>Color output
+			<select
+				id="select_color_output"
+				class="border border-neutral-300 bg-white text-sm outline-none focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800">
+				<option value="palette" disabled>Palette</option>
+				<option value="hex">Hex</option>
+				<option value="hsl" disabled>HSL</option>
+				<option value="rgb" disabled>RGB</option>
+			</select>
+		</label>
+	</div>
+	<div class="space-y-4">
+		<div id="codeConfig" class="">
+			<div class="border border-b-0 border-neutral-300 px-4 py-2 italic dark:border-neutral-700">
+				tailwind.config.js
+			</div>
+			<pre
+				class="border border-neutral-300 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-900"><code set:html={getTw3Code()} /></pre>
+		</div>
+		<div id="codeCss" class="hidden">
+			<div class="border border-b-0 border-neutral-300 px-4 py-2 italic dark:border-neutral-700">
+				tailwind.css
+			</div>
+			<pre
+				class="border border-neutral-300 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-900"><code set:html={getTw3CodeCss()} /></pre>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { getTw3CodeConfig, getTw3CodeCss, getTw3Code, getTw4CodeCss } from "@utils/code"
+	import { getCurrentColor, type LightnessColorSpaceTypes } from "@utils/colors"
+	import { converter, formatCss, formatHex, formatHsl, formatRgb, parse } from "culori"
+
+	const codeConfig = document.getElementById("codeConfig") as HTMLDivElement
+	const codeCss = document.getElementById("codeCss") as HTMLDivElement
+
+	const rdo_palettes = document.getElementsByName("rdo_palette")
+	if (rdo_palettes) {
+		for (const input of rdo_palettes) {
+			input.addEventListener("change", () => {
+				updateCode()
+			})
+		}
+	}
+
+	const colorPalette = document.getElementById("colorPalette") as HTMLDivElement
+	const inputs_palette = colorPalette.getElementsByTagName("input")
+	if (inputs_palette) {
+		for (const input of inputs_palette) {
+			input.addEventListener("change", () => {
+				updateCode()
+			})
+		}
+	}
+
+	/**
+	 * Updates the color output based on the selected color and shade inputs.
+	 */
+	const updateColorOutput = () => {
+		const select_color_output = document.getElementById("select_color_output") as HTMLSelectElement
+		const ck_use_vars = document.getElementById("ck_use_vars") as HTMLInputElement
+		const selectedTwVersion = select_tw_version.options[select_tw_version.selectedIndex].value
+		if (selectedTwVersion === "v3") {
+			ck_use_vars.disabled = false
+			for (const option of select_color_output.options) {
+				switch (option.value) {
+					case "palette":
+						option.disabled = true
+						break
+
+					case "hex":
+						option.disabled = ck_use_vars.checked
+						break
+
+					case "hsl":
+						option.disabled = !ck_use_vars.checked
+						break
+
+					case "rgb":
+						option.disabled = !ck_use_vars.checked
+						break
+
+					default:
+						break
+				}
+				if (option.disabled) {
+					option.selected = false
+				}
+			}
+			if (select_color_output.selectedIndex === -1) {
+				for (const option of select_color_output.options) {
+					if (!option.disabled) {
+						option.selected = true
+						break
+					}
+				}
+			}
+		} else {
+			ck_use_vars.disabled = true
+			for (const option of select_color_output.options) {
+				option.disabled = false
+			}
+		}
+	}
+
+	/**
+	 * Converts the color value from the specified color space to another format.
+	 *
+	 * @param {LightnessColorSpaceTypes} cs - The color space type to convert to.
+	 * @param {string} color - The color value to convert.
+	 * @return {string} The converted color value.
+	 */
+	const convertColor = (cs: LightnessColorSpaceTypes, color: string) => {
+		let cv = converter(cs)
+		return cs === "hsl" ? formatHsl(cv(color)) : formatCss(cv(color))
+	}
+
+	/**
+	 * Updates the code display based on the selected color values.
+	 */
+	const updateCode = () => {
+		updateColorOutput()
+
+		const select_color_output = document.getElementById("select_color_output") as HTMLSelectElement
+		const selectedOutput = select_color_output.options[select_color_output.selectedIndex].value
+		const colorPalette = document.getElementById("colorPalette") as HTMLDivElement
+		const inputs = colorPalette.getElementsByTagName("input")
+		const uls = colorPalette.getElementsByTagName("ul")
+		let colors = []
+		let i = 0
+		for (const ul of uls) {
+			if (ul.children.length > 0) {
+				let shades = []
+				// for the first color, add a default shade for tailwind CSS (e.g. bg-primary or bg-brand) using the user's selected color
+				if (i === 0) {
+					const currentColor = getCurrentColor(selectedOutput as LightnessColorSpaceTypes)
+					shades.push({
+						shade: "DEFAULT",
+						color:
+							selectedOutput === "rgb"
+								? formatRgb(currentColor)!
+								: selectedOutput === "hsl"
+									? formatHsl(currentColor)!
+									: selectedOutput === "hex"
+										? formatHex(currentColor)!
+										: formatCss(currentColor)!
+					})
+				}
+				for (const li of ul.children) {
+					const bgColorComputed = window.getComputedStyle(li).getPropertyValue("background-color")
+					const bgColorString = (li as HTMLLIElement).style.backgroundColor
+					console.log(bgColorComputed, bgColorString)
+					const bgColor = parse(bgColorComputed)
+					shades.push({
+						shade: (li as HTMLLIElement).innerText,
+						color:
+							selectedOutput === "rgb"
+								? formatRgb(bgColor)!
+								: selectedOutput === "hsl"
+									? formatHsl(bgColor)!
+									: selectedOutput === "hex"
+										? formatHex(bgColor)!
+										: bgColorString
+					})
+				}
+				colors.push({ name: inputs[i].value ? inputs[i].value : inputs[i].placeholder, shades })
+			}
+			i++
+		}
+
+		updateVisibleCode()
+
+		if (select_tw_version.value === "v3") {
+			if (ck_use_vars.checked) {
+				// if (selectedOutput === "rgb" || selectedOutput === "hsl") {
+				codeConfig.getElementsByTagName("code")[0].innerHTML = getTw3CodeConfig(
+					selectedOutput,
+					colors
+				)
+				codeCss.getElementsByTagName("code")[0].innerHTML = getTw3CodeCss(selectedOutput, colors)
+			} else {
+				codeConfig.getElementsByTagName("code")[0].innerHTML = getTw3Code(colors)
+			}
+		} else {
+			codeCss.getElementsByTagName("code")[0].innerHTML = getTw4CodeCss(colors)
+		}
+	}
+
+	/**
+	 * Updates the visible code display based on the selected color values.
+	 */
+	const updateVisibleCode = () => {
+		if (select_tw_version.value === "v3") {
+			codeConfig.classList.remove("hidden")
+			if (ck_use_vars.checked) {
+				codeCss.classList.remove("hidden")
+			} else {
+				codeCss.classList.add("hidden")
+			}
+		} else {
+			codeConfig.classList.add("hidden")
+			codeCss.classList.remove("hidden")
+		}
+	}
+
+	const select_tw_version = document.getElementById("select_tw_version") as HTMLSelectElement
+	select_tw_version?.addEventListener("change", () => {
+		updateVisibleCode()
+		updateColorOutput()
+		updateCode()
+	})
+
+	const ck_extend = document.getElementById("ck_extend") as HTMLInputElement
+	ck_extend?.addEventListener("change", () => {
+		updateCode()
+	})
+
+	const ck_use_vars = document.getElementById("ck_use_vars") as HTMLInputElement
+	ck_use_vars?.addEventListener("change", () => {
+		updateCode()
+	})
+
+	const select_color_output = document.getElementById("select_color_output") as HTMLSelectElement
+	select_color_output?.addEventListener("change", () => {
+		updateCode()
+	})
+</script>

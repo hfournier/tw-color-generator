@@ -1,0 +1,54 @@
+---
+import { colorShades, defaultColors, twColors, twGrays } from "@utils/colors"
+import ShadeColumn from "./ShadeColumn.astro"
+---
+
+<ShadeColumn id="1" csType="tw" title="Tailwind CSS Colors" subTitle="for comparison only">
+	<Fragment slot="csOptions">
+		<optgroup label="Colors">
+			{
+				twColors.map((twColor) => (
+					<option selected={twColor.name === defaultColors.tw_color ? true : null}>
+						{twColor.name}
+					</option>
+				))
+			}
+		</optgroup>
+		<hr class="sr-only my-2" />
+		<optgroup label="Grays">
+			{twGrays.map((twGray) => <option>{twGray}</option>)}
+		</optgroup>
+	</Fragment>
+	<Fragment slot="shadeItmes">
+		{
+			colorShades.map((colorShade) => (
+				<li
+					class:list={[
+						"flex aspect-[5/1] items-center justify-center",
+						`bg-${defaultColors.tw_color}-${colorShade}`,
+						{ "text-black": colorShade < 400 },
+						{ "text-white": colorShade >= 400 }
+					]}>
+					{colorShade}
+				</li>
+			))
+		}
+	</Fragment>
+</ShadeColumn>
+
+<script>
+	import { defaultColors, updateTwColors } from "@utils/colors"
+
+	const select_tw_colors = document.getElementById("select_tw_1") as HTMLSelectElement
+	select_tw_colors.dataset.color = defaultColors.tw_color
+
+	select_tw_colors.addEventListener("change", () => {
+		updateTwColors()
+	})
+
+	select_tw_colors.form?.addEventListener("reset", () => {
+		setTimeout(() => {
+			updateTwColors()
+		}, 10)
+	})
+</script>

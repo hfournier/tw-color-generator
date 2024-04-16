@@ -1,0 +1,145 @@
+{
+	"hsl": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.21
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.1725
+		}
+	},
+	"hwb": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.21
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.1725
+		}
+	},
+	"lab": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.2
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.18
+		}
+	},
+	"lch": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.2
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.18
+		}
+	},
+	"oklch": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.2
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.14
+		}
+	},
+	"oklab": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.2
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.14
+		}
+	},
+	"srgb": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.2
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.17
+		}
+	},
+	"srgb-linear": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.18
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.215
+		}
+	},
+	"xyz": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.18
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.21
+		}
+	},
+	"xyz-d50": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.18
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.21
+		}
+	},
+	"xyz-d65": {
+		"neutral": 0.0,
+		"light": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.18
+		},
+		"dark": {
+			"min": 0.17777,
+			"max": 0.22,
+			"step": 0.21
+		}
+	}
+}

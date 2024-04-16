@@ -1,0 +1,22 @@
+---
+import ShadeColumnTw from "./ShadeColumnTw.astro"
+import ShadeColumnCS from "./ShadeColumnCS.astro"
+import ShadeColumnRCS from "./ShadeColumnRCS.astro"
+import ShadeColumnPCS from "./ShadeColumnPCS.astro"
+---
+
+<section
+	id="colorGrid"
+	class="grid grid-flow-col grid-cols-7 grid-rows-[auto_auto_auto_auto_1fr_auto_auto] gap-1">
+	<!-- Tailwind CSS Color -->
+	<ShadeColumnTw />
+	<!-- Lightness Color Space -->
+	<ShadeColumnCS id="1" />
+	<ShadeColumnCS id="2" />
+	<!-- Rectangular Color Space -->
+	<ShadeColumnRCS id="1" />
+	<ShadeColumnRCS id="2" />
+	<!-- Polar Color Space -->
+	<ShadeColumnPCS id="1" />
+	<ShadeColumnPCS id="2" />
+</section>

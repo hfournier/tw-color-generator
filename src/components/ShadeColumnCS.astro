@@ -1,0 +1,121 @@
+---
+import { formatCss } from "culori"
+import shadeOptions from "@data/shade-options.json"
+import { defaultColors, getColorShades, formatColor, LightnessColorSpaces } from "@utils/colors"
+import ShadeColumn from "./ShadeColumn.astro"
+
+type Props = {
+	id: "1" | "2"
+}
+const { id } = Astro.props
+const default_cs = id === "1" ? defaultColors.cs_1 : defaultColors.cs_2
+const colorShades = getColorShades(defaultColors.hex, default_cs)
+const so = shadeOptions[default_cs]
+---
+
+<ShadeColumn
+	{id}
+	csType="cs"
+	title="Color Spaces"
+	subTitle="varying lightness"
+	defaultCs={default_cs}
+	colorOptions={so}>
+	<Fragment slot="csOptions">
+		{
+			LightnessColorSpaces.map((cs) => (
+				<option selected={cs === default_cs ? true : null}>{cs}</option>
+			))
+		}
+	</Fragment>
+	<Fragment slot="shadeItmes">
+		{
+			colorShades.map((colorShade) => (
+				<li
+					class:list={[
+						"flex aspect-[5/1] items-center justify-center",
+						{ "text-black": colorShade.shade < 400 },
+						{ "text-white": colorShade.shade >= 400 }
+					]}
+					style={colorShade.color ? `background-color: ${formatCss(colorShade.color)}` : null}
+					title={formatColor(colorShade.color!)}>
+					{colorShade.shade}
+				</li>
+			))
+		}
+	</Fragment>
+</ShadeColumn>
+
+<script>
+	import {
+		getCurrentColor500,
+		getShadeOptions,
+		updateShadeOptions,
+		updateShades,
+		type LightnessColorSpaceTypes
+	} from "@utils/colors"
+
+	const shadeCols = document.querySelectorAll<HTMLElement>('[data-cs-type="cs"]')
+	if (shadeCols) {
+		for (const shadeCol of shadeCols) {
+			const select = shadeCol.getElementsByTagName("select")[0]
+			const ul = shadeCol.getElementsByTagName("ul")[0]
+			const inputs = shadeCol.getElementsByTagName("input")
+
+			updateShadeOptions(
+				select.options[select.selectedIndex].value as LightnessColorSpaceTypes,
+				inputs[0],
+				inputs[1]
+			)
+
+			select.addEventListener("change", () => {
+				updateShades(
+					getCurrentColor500(),
+					ul,
+					select.options[select.selectedIndex].value as LightnessColorSpaceTypes
+				)
+				updateShadeOptions(
+					select.options[select.selectedIndex].value as LightnessColorSpaceTypes,
+					inputs[0],
+					inputs[1]
+				)
+				// unselect palette radio button
+				inputs[2].checked = false
+			})
+
+			inputs[0].addEventListener("input", (e) => {
+				if (inputs[0].checkValidity()) {
+					const so = getShadeOptions()
+					so[select.options[select.selectedIndex].value as LightnessColorSpaceTypes].light.step = (
+						e.target as HTMLInputElement
+					).valueAsNumber
+					localStorage.setItem("shadeOptions", JSON.stringify(so))
+
+					updateShades(
+						getCurrentColor500(),
+						ul,
+						select.options[select.selectedIndex].value as LightnessColorSpaceTypes
+					)
+				}
+			})
+
+			inputs[1].addEventListener("input", (e) => {
+				if (inputs[1].checkValidity()) {
+					const so = getShadeOptions()
+					so[select.options[select.selectedIndex].value as LightnessColorSpaceTypes].dark.step = (
+						e.target as HTMLInputElement
+					).valueAsNumber
+					localStorage.setItem("shadeOptions", JSON.stringify(so))
+
+					updateShades(
+						getCurrentColor500(),
+						ul,
+						select.options[select.selectedIndex].value as LightnessColorSpaceTypes
+					)
+				}
+			})
+
+			// palette radio button value
+			inputs[2].value = select.options[select.selectedIndex].value as LightnessColorSpaceTypes
+		}
+	}
+</script>

@@ -1,0 +1,120 @@
+---
+import colorMixOptions from "@data/color-mix-options.json"
+import { defaultColors, getShades, RectangularColorSpaces } from "@utils/colors"
+import { round } from "culori"
+import ShadeColumn from "./ShadeColumn.astro"
+
+type Props = {
+	id: "1" | "2"
+}
+const { id } = Astro.props
+const default_rcs = id === "1" ? defaultColors.rcs_1 : defaultColors.rcs_2
+const colorShades = getShades(colorMixOptions[default_rcs])
+const cmo = colorMixOptions[default_rcs]
+const round0 = round(0)
+---
+
+<ShadeColumn
+	{id}
+	csType="rcs"
+	title="Rectangular Color Spaces"
+	subTitle="using color-mix() to add white/black"
+	defaultCs={default_rcs}
+	colorOptions={cmo}>
+	<Fragment slot="csOptions">
+		{
+			RectangularColorSpaces.map((rcs) => (
+				<option selected={rcs === default_rcs ? true : null}>{rcs}</option>
+			))
+		}
+	</Fragment>
+	<Fragment slot="shadeItmes">
+		{
+			colorShades.map((colorShade) => (
+				<li
+					class:list={[
+						"flex aspect-[5/1] items-center justify-center",
+						{ "text-black": colorShade.shade < 400 },
+						{ "text-white": colorShade.shade >= 400 }
+					]}
+					style={`background-color: color-mix(in ${default_rcs}, ${defaultColors.hex}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)`}
+					title={`color-mix(in ${default_rcs}, ${defaultColors.hex}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? round0(colorShade.w * 100) : round0(colorShade.b * 100)}%)`}>
+					{colorShade.shade}
+				</li>
+			))
+		}
+	</Fragment>
+</ShadeColumn>
+
+<script>
+	import {
+		getCurrentColor500,
+		updateColorMixOptions,
+		updateMixes,
+		type RectangularColorSpaceTypes,
+		getColorMixOptions
+	} from "@utils/colors"
+
+	const shadeCols = document.querySelectorAll<HTMLElement>('[data-cs-type="rcs"]')
+	if (shadeCols) {
+		for (const shadeCol of shadeCols) {
+			const select = shadeCol.getElementsByTagName("select")[0]
+			const ul = shadeCol.getElementsByTagName("ul")[0]
+			const inputs = shadeCol.getElementsByTagName("input")
+
+			updateColorMixOptions(
+				select.options[select.selectedIndex].value as RectangularColorSpaceTypes,
+				inputs[0],
+				inputs[1]
+			)
+
+			select.addEventListener("change", () => {
+				updateMixes(
+					getCurrentColor500(),
+					ul,
+					select.options[select.selectedIndex].value as RectangularColorSpaceTypes
+				)
+				updateColorMixOptions(
+					select.options[select.selectedIndex].value as RectangularColorSpaceTypes,
+					inputs[0],
+					inputs[1]
+				)
+				// unselect palette radio button
+				inputs[2].checked = false
+			})
+
+			inputs[0].addEventListener("input", (e) => {
+				if (inputs[0].checkValidity()) {
+					const cmo = getColorMixOptions()
+					cmo[select.options[select.selectedIndex].value as RectangularColorSpaceTypes].light.step =
+						(e.target as HTMLInputElement).valueAsNumber
+					localStorage.setItem("cmOptions", JSON.stringify(cmo))
+
+					updateMixes(
+						getCurrentColor500(),
+						ul,
+						select.options[select.selectedIndex].value as RectangularColorSpaceTypes
+					)
+				}
+			})
+
+			inputs[1].addEventListener("input", (e) => {
+				if (inputs[1].checkValidity()) {
+					const cmo = getColorMixOptions()
+					cmo[select.options[select.selectedIndex].value as RectangularColorSpaceTypes].dark.step =
+						(e.target as HTMLInputElement).valueAsNumber
+					localStorage.setItem("cmOptions", JSON.stringify(cmo))
+
+					updateMixes(
+						getCurrentColor500(),
+						ul,
+						select.options[select.selectedIndex].value as RectangularColorSpaceTypes
+					)
+				}
+			})
+
+			// palette radio button value
+			inputs[2].value = select.options[select.selectedIndex].value as RectangularColorSpaceTypes
+		}
+	}
+</script>

@@ -1,0 +1,14 @@
+---
+type Props = {
+	step: number
+}
+const { step } = Astro.props
+---
+
+<div
+	class="flex items-center gap-2 rounded-full border border-users-500 p-2 text-lg font-bold group-[.hide-instructions]/instructions:hidden">
+	<span class="grid aspect-square w-8 place-content-center rounded-full bg-users-500 text-white"
+		>{step}</span
+	>
+	<slot />
+</div>
