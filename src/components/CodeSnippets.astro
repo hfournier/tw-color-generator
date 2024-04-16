@@ -88,6 +88,26 @@ import { getTw3Code, getTw3CodeCss } from "@utils/code"
 		}
 	}
 
+	const select_color_scheme = document.getElementById("select_color_scheme") as HTMLSelectElement
+	select_color_scheme.addEventListener("change", () => {
+		updateCode()
+	})
+
+	const ck_grayish = document.getElementById("ck_grayish") as HTMLInputElement
+	ck_grayish.addEventListener("change", () => {
+		updateCode()
+	})
+
+	const rg_grayish_saturation = document.getElementById("rg_grayish_saturation") as HTMLInputElement
+	rg_grayish_saturation.addEventListener("change", () => {
+		updateCode()
+	})
+
+	const rg_grayish_bw_offset = document.getElementById("rg_grayish_bw_offset") as HTMLInputElement
+	rg_grayish_bw_offset.addEventListener("change", () => {
+		updateCode()
+	})
+
 	/**
 	 * Updates the color output based on the selected color and shade inputs.
 	 */
