@@ -204,7 +204,6 @@ import { getTw3Code, getTw3CodeCss } from "@utils/code"
 				for (const li of ul.children) {
 					const bgColorComputed = window.getComputedStyle(li).getPropertyValue("background-color")
 					const bgColorString = (li as HTMLLIElement).style.backgroundColor
-					console.log(bgColorComputed, bgColorString)
 					const bgColor = parse(bgColorComputed)
 					shades.push({
 						shade: (li as HTMLLIElement).innerText,
