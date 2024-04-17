@@ -72,7 +72,9 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 	}
 	{
 		csType !== "tw" && (
-			<label class="row-start-6 flex justify-center" title="Copy this color space to your palette">
+			<label
+				class="row-start-6 mx-2 flex cursor-pointer items-center justify-center gap-2 rounded-sm border-2 border-users-500 shadow-sm hover:shadow-lg"
+				title="Copy this color space to your palette">
 				<input
 					id={`rdo_palette_${csType}_${id}`}
 					class="peer hidden"
@@ -80,8 +82,14 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 					name="rdo_palette"
 					value={defaultCs}
 				/>
-				<Icon class="size-8 text-users-500 peer-checked:hidden" name="mdi:palette-outline" />
-				<Icon class="hidden size-8 text-users-500 peer-checked:block" name="mdi:palette" />
+				<>
+					<Icon class="size-8 text-users-500 peer-checked:hidden" name="mdi:palette-outline" />
+					<span class="inline-block font-medium text-users-500 peer-checked:hidden">Copy</span>
+				</>
+				<>
+					<Icon class="hidden size-8 text-users-500 peer-checked:block" name="mdi:palette" />
+					<span class="hidden font-medium text-users-500 peer-checked:block">Copied!</span>
+				</>
 			</label>
 		)
 	}
