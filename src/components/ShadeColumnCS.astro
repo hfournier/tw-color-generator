@@ -1,5 +1,5 @@
 ---
-import { formatCss } from "culori"
+import { formatCss, wcagContrast } from "culori"
 import shadeOptions from "@data/shade-options.json"
 import { defaultColors, getColorShades, formatColor, LightnessColorSpaces } from "@utils/colors"
 import ShadeColumn from "./ShadeColumn.astro"
@@ -27,20 +27,24 @@ const so = shadeOptions[default_cs]
 			))
 		}
 	</Fragment>
-	<Fragment slot="shadeItmes">
+	<Fragment slot="shadeItems">
 		{
-			colorShades.map((colorShade) => (
-				<li
-					class:list={[
-						"flex aspect-[5/1] items-center justify-center",
-						{ "text-black": colorShade.shade < 400 },
-						{ "text-white": colorShade.shade >= 400 }
-					]}
-					style={colorShade.color ? `background-color: ${formatCss(colorShade.color)}` : null}
-					title={formatColor(colorShade.color!)}>
-					{colorShade.shade}
-				</li>
-			))
+			colorShades.map((colorShade) => {
+				const contrastRatioWhite = wcagContrast(colorShade.color!, "white")
+				const contrastRatioBlack = wcagContrast(colorShade.color!, "black")
+				return (
+					<li
+						class:list={[
+							"flex aspect-[5/1] items-center justify-center",
+							{ "text-black": contrastRatioBlack > contrastRatioWhite },
+							{ "text-white": contrastRatioBlack <= contrastRatioWhite }
+						]}
+						style={colorShade.color ? `background-color: ${formatCss(colorShade.color)}` : null}
+						title={formatColor(colorShade.color!)}>
+						{colorShade.shade}
+					</li>
+				)
+			})
 		}
 	</Fragment>
 </ShadeColumn>

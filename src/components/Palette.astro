@@ -2,9 +2,9 @@
 import { colorSchemes } from "@utils/colors"
 ---
 
-<section>
+<section class="">
 	<h2 class="pb-2 text-2xl font-semibold">Your Color Palette</h2>
-	<div class="flex items-center divide-x-2 py-2 dark:divide-neutral-600">
+	<div class="flex flex-col py-2 sm:flex-row sm:items-center sm:divide-x-2 dark:divide-neutral-600">
 		<div class="flex items-center gap-1 py-2">
 			<label class="flex items-center gap-2 pr-2 text-sm"
 				>Color scheme
@@ -53,10 +53,10 @@ import { colorSchemes } from "@utils/colors"
 	<hr class="dark:border-neutral-600" />
 	<div id="colorPalette" class="grid grid-cols-5 gap-1 py-4">
 		<div class="flex flex-col gap-2">
-			<label class="hidden items-center justify-center gap-2 text-sm"
+			<label class="hidden flex-col items-center justify-center gap-2 text-sm sm:flex-row"
 				>Name
 				<input
-					class="w-3/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+					class="w-4/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 sm:w-3/5 dark:border-neutral-600 dark:bg-neutral-800"
 					type="text"
 					placeholder="color1"
 				/>
@@ -64,10 +64,10 @@ import { colorSchemes } from "@utils/colors"
 			<ul class="flex flex-col gap-1"></ul>
 		</div>
 		<div class="flex flex-col gap-2">
-			<label class="hidden items-center justify-center gap-2 text-sm"
+			<label class="hidden flex-col items-center justify-center gap-2 text-sm sm:flex-row"
 				>Name
 				<input
-					class="w-3/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+					class="w-4/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 sm:w-3/5 dark:border-neutral-600 dark:bg-neutral-800"
 					type="text"
 					placeholder="color2"
 				/>
@@ -75,10 +75,10 @@ import { colorSchemes } from "@utils/colors"
 			<ul class="flex flex-col gap-1"></ul>
 		</div>
 		<div class="flex flex-col gap-2">
-			<label class="hidden items-center justify-center gap-2 text-sm"
+			<label class="hidden flex-col items-center justify-center gap-2 text-sm sm:flex-row"
 				>Name
 				<input
-					class="w-3/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+					class="w-4/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 sm:w-3/5 dark:border-neutral-600 dark:bg-neutral-800"
 					type="text"
 					placeholder="color3"
 				/>
@@ -86,10 +86,10 @@ import { colorSchemes } from "@utils/colors"
 			<ul class="flex flex-col gap-1"></ul>
 		</div>
 		<div class="flex flex-col gap-2">
-			<label class="hidden items-center justify-center gap-2 text-sm"
+			<label class="hidden flex-col items-center justify-center gap-2 text-sm sm:flex-row"
 				>Name
 				<input
-					class="w-3/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+					class="w-4/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 sm:w-3/5 dark:border-neutral-600 dark:bg-neutral-800"
 					type="text"
 					placeholder="color4"
 				/>
@@ -97,10 +97,10 @@ import { colorSchemes } from "@utils/colors"
 			<ul class="flex flex-col gap-1"></ul>
 		</div>
 		<div class="flex flex-col gap-2">
-			<label class="hidden items-center justify-center gap-2 text-sm"
+			<label class="hidden flex-col items-center justify-center gap-2 text-sm sm:flex-row"
 				>Name
 				<input
-					class="w-3/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+					class="w-4/5 border border-neutral-300 bg-white py-1.5 outline-none placeholder:text-sm placeholder:text-neutral-400 focus:border-users-500 focus:ring-users-500 sm:w-3/5 dark:border-neutral-600 dark:bg-neutral-800"
 					type="text"
 					placeholder="color5"
 				/>
@@ -119,7 +119,8 @@ import { colorSchemes } from "@utils/colors"
 		type LightnessColorSpaceTypes,
 		getShades,
 		type ColorSpaceTypes,
-		getColorMixOptions
+		getColorMixOptions,
+		updateTextColor
 	} from "@utils/colors"
 	import { formatCss, formatHex, hsl, type Hsl } from "culori"
 
@@ -181,7 +182,7 @@ import { colorSchemes } from "@utils/colors"
 					ul_palettes![i++].innerHTML =
 						getColorShades(currentColor500, selectedCS)
 							.map((colorShade) => {
-								return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
+								return `<li class="flex aspect-[5/1] items-center justify-center" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
 							})
 							.join("\n") + "\n"
 				} else {
@@ -189,12 +190,15 @@ import { colorSchemes } from "@utils/colors"
 						getShades(getColorMixOptions()[selectedCS as ColorSpaceTypes])
 							.map((colorShade) => {
 								if (selectedHim !== undefined) {
-									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+									return `<li class="flex aspect-[5/1] items-center justify-center" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
 								} else {
-									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS}, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+									return `<li class="flex aspect-[5/1] items-center justify-center" style="background-color: color-mix(in ${selectedCS}, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${currentColor500}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
 								}
 							})
 							.join("\n") + "\n"
+				}
+				for (const li of ul_palettes[i - 1].children) {
+					updateTextColor(li as HTMLLIElement)
 				}
 
 				let color2, color3, color4: Hsl | undefined
@@ -222,7 +226,7 @@ import { colorSchemes } from "@utils/colors"
 						color3 = hsl(currentColor500)!
 						compHue = color3.h! - compOffset
 						if (compHue < 0) {
-							compHue = 360 - compHue
+							compHue = 360 + compHue
 						}
 						color3.h = compHue
 
@@ -343,6 +347,9 @@ import { colorSchemes } from "@utils/colors"
 								})
 								.join("\n") + "\n"
 					}
+					for (const li of ul_palettes[i - 1].children) {
+						updateTextColor(li as HTMLLIElement)
+					}
 				}
 
 				if (color3) {
@@ -366,6 +373,9 @@ import { colorSchemes } from "@utils/colors"
 								})
 								.join("\n") + "\n"
 					}
+					for (const li of ul_palettes[i - 1].children) {
+						updateTextColor(li as HTMLLIElement)
+					}
 				}
 
 				if (color4) {
@@ -388,6 +398,9 @@ import { colorSchemes } from "@utils/colors"
 									}
 								})
 								.join("\n") + "\n"
+					}
+					for (const li of ul_palettes[i - 1].children) {
+						updateTextColor(li as HTMLLIElement)
 					}
 				}
 
@@ -420,6 +433,9 @@ import { colorSchemes } from "@utils/colors"
 								})
 								.join("\n") + "\n"
 					}
+					for (const li of ul_palettes[i - 1].children) {
+						updateTextColor(li as HTMLLIElement)
+					}
 				}
 				// hide extra column name inputs
 				for (let index = i; index < 5; index++) {
@@ -449,12 +465,12 @@ import { colorSchemes } from "@utils/colors"
 	})
 
 	const rg_grayish_saturation = document.getElementById("rg_grayish_saturation") as HTMLInputElement
-	rg_grayish_saturation.addEventListener("change", () => {
+	rg_grayish_saturation.addEventListener("input", () => {
 		updatePalette()
 	})
 
 	const rg_grayish_bw_offset = document.getElementById("rg_grayish_bw_offset") as HTMLInputElement
-	rg_grayish_bw_offset.addEventListener("change", () => {
+	rg_grayish_bw_offset.addEventListener("input", () => {
 		updatePalette()
 	})
 </script>

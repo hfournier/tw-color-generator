@@ -7,7 +7,7 @@ import ShadeColumnPCS from "./ShadeColumnPCS.astro"
 
 <section
 	id="colorGrid"
-	class="grid grid-flow-col grid-cols-7 grid-rows-[auto_auto_auto_auto_1fr_auto_auto] gap-1">
+	class="scrollable grid max-w-full grid-flow-col grid-cols-[repeat(7,_minmax(121px,_1fr))] grid-rows-[auto_auto_auto_auto_1fr_auto_auto] gap-1 overflow-x-scroll pb-4 lg:grid-cols-[repeat(7,_minmax(131px,_1fr))] lg:overflow-x-auto">
 	<!-- Tailwind CSS Color -->
 	<ShadeColumnTw />
 	<!-- Lightness Color Space -->

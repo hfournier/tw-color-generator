@@ -14,7 +14,8 @@ import {
 	type Oklab,
 	type Oklch,
 	round,
-	formatCss
+	formatCss,
+	wcagContrast
 } from "culori"
 import defaultColorMixOptions from "@data/color-mix-options.json"
 import defaultShadeOptions from "@data/shade-options.json"
@@ -443,6 +444,7 @@ export const updateMixes = (
 			)
 			li.title = `color-mix(in ${selectedCS}, ${color}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? round0(colorShade.w * 100) : round0(colorShade.b * 100)}%)`
 		}
+		updateTextColor(li)
 	})
 }
 
@@ -486,7 +488,26 @@ export const updateShades = (
 		const li = ul.children[i] as HTMLLIElement
 		li.title = formatColor(colorShade.color!)
 		li.style.setProperty("background-color", formatCss(colorShade.color!))
+		updateTextColor(li)
 	})
+}
+
+/**
+ * Updates the text color of an HTML list item element based on the contrast ratio between the background color and white or black.
+ *
+ * @param {HTMLLIElement} li - The HTML list item element to update the text color of.
+ */
+export const updateTextColor = (li: HTMLLIElement) => {
+	const bgColor = window.getComputedStyle(li).getPropertyValue("background-color")
+	const contrastRatioWhite = wcagContrast(bgColor, "white")
+	const contrastRatioBlack = wcagContrast(bgColor, "black")
+	if (contrastRatioBlack > contrastRatioWhite) {
+		li.classList.remove("text-white")
+		li.classList.add("text-black")
+	} else {
+		li.classList.remove("text-black")
+		li.classList.add("text-white")
+	}
 }
 
 /**
@@ -504,6 +525,7 @@ export const updateTwColors = () => {
 		li.classList.add(
 			`bg-${select_tw_colors.options[select_tw_colors.selectedIndex].value}-${colorShade}`
 		)
+		updateTextColor(li)
 	})
 	select_tw_colors.dataset.color = select_tw_colors.options[select_tw_colors.selectedIndex].value
 }

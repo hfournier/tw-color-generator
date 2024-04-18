@@ -5,29 +5,30 @@ import { defaultColors } from "@utils/colors"
 const round0 = round(0)
 ---
 
-<section class="flex items-center divide-x-2 dark:divide-neutral-600">
-	<label class="flex items-center gap-2 pr-3"
+<section
+	class="flex flex-col py-2 sm:flex-row sm:items-center sm:divide-x-2 dark:divide-neutral-600">
+	<label class="flex items-center gap-2 py-2 pr-3 sm:py-0"
 		><div class="text-sm">Select a color</div>
 		<input
 			id="input_colorPicker"
 			type="color"
 			title="Pick me! Pick me!"
-			class="size-8 rounded-sm bg-transparent outline-none focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-users-500"
+			class="size-8 rounded-sm bg-transparent outline-none focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-users-500 sm:h-8 sm:w-6 md:size-8"
 			value={defaultColors.hex}
 		/>
 	</label>
-	<label class="flex items-center gap-2 px-3">
+	<label class="flex items-center gap-2 py-2 sm:px-2 sm:py-0 md:px-3">
 		<div class="text-sm">Hex</div>
 		<input
 			id="input_colorHex"
-			class="w-20 border-0 border-b-2 border-neutral-300 p-1 text-center outline-none selection:bg-users-500 selection:text-white invalid:border-2 invalid:border-red-500 focus:border-2 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
+			class="w-[4.5rem] border-0 border-b-2 border-neutral-300 p-1 text-center outline-none selection:bg-users-500 selection:text-white invalid:border-2 invalid:border-red-500 focus:border-2 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
 			type="text"
 			title="Go ahead and Paste me!"
 			pattern="#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})"
 			value={defaultColors.hex}
 		/>
 	</label>
-	<div class="flex items-center gap-3 px-3">
+	<div class="flex items-center gap-3 py-2 sm:px-2 sm:py-0 md:px-3">
 		<label class="flex items-center gap-2">
 			<div class="text-center text-sm">Hue (deg)</div>
 			<input
@@ -65,7 +66,7 @@ const round0 = round(0)
 			/>
 		</label>
 	</div>
-	<div class="px-3">
+	<div class="py-2 sm:px-2 sm:py-0 md:px-3">
 		<button
 			id="btn_reset"
 			type="button"
@@ -132,9 +133,22 @@ const round0 = round(0)
 	/**
 	 * When the reset button is clicked, reset the form and update all the colors
 	 */
-	btn_reset.addEventListener("click", (e) => {
+	btn_reset.addEventListener("click", () => {
 		form_color.reset()
 		updateColor(input_colorPicker)
+	})
+
+	const select_tw_colors = document.getElementById("select_tw_1") as HTMLSelectElement
+	select_tw_colors.addEventListener("change", () => {
+		// wait for the color to change
+		setTimeout(() => {
+			const ul_tw_colors = document.getElementById("ul_tw_1") as HTMLUListElement
+			const twColor500 = window
+				.getComputedStyle(ul_tw_colors.children[5])
+				.getPropertyValue("background-color")
+			input_colorPicker.value = formatHex(twColor500)!
+			updateColor(input_colorPicker as HTMLInputElement)
+		}, 10)
 	})
 
 	/**
@@ -144,7 +158,11 @@ const round0 = round(0)
 	const updateColor = (input: HTMLInputElement) => {
 		if (input.checkValidity()) {
 			div_errorMsg.innerText = ""
-			input_colorHex.value = input.value
+			if (input.id === "input_colorPicker") {
+				input_colorHex.value = input.value
+			} else if (input.id === "input_colorHex") {
+				input_colorPicker.value = input.value
+			}
 			const hslColor = hsl(input.value)
 			if (hslColor) {
 				const tw = getNearestTwHue(hslColor.h!)
@@ -200,8 +218,24 @@ const round0 = round(0)
 					}
 				}
 			}
+
+			resetPalettePicker()
 		} else {
 			div_errorMsg.innerText = "Invalid Color input"
+		}
+	}
+
+	/**
+	 * Reset the radio buttons so that none of the color spaces are selected
+	 */
+	const resetPalettePicker = () => {
+		const rdo_palettes = document.getElementsByName("rdo_palette")
+		if (rdo_palettes) {
+			for (const input of rdo_palettes) {
+				if ((input as HTMLInputElement).checked) {
+					;(input as HTMLInputElement).checked = false
+				}
+			}
 		}
 	}
 </script>

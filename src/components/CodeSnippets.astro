@@ -4,7 +4,7 @@ import { getTw3Code, getTw3CodeCss } from "@utils/code"
 
 <section class="">
 	<h2 class="pb-2 text-2xl font-semibold">Your Code Snippets</h2>
-	<div class="flex items-center divide-x-2 py-2 dark:divide-neutral-600">
+	<div class="flex flex-col py-2 sm:flex-row sm:items-center sm:divide-x-2 dark:divide-neutral-600">
 		<div class="flex items-center gap-1 py-2">
 			<label class="flex items-center gap-2 pr-2 text-sm"
 				>Tailwind
@@ -31,7 +31,7 @@ import { getTw3Code, getTw3CodeCss } from "@utils/code"
 				/>Use CSS vars</label
 			>
 		</div>
-		<label class="flex items-center gap-2 px-2 text-sm"
+		<label class="flex items-center gap-2 text-sm sm:px-2"
 			>Color output
 			<select
 				id="select_color_output"
@@ -49,14 +49,14 @@ import { getTw3Code, getTw3CodeCss } from "@utils/code"
 				tailwind.config.js
 			</div>
 			<pre
-				class="border border-neutral-300 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-900"><code set:html={getTw3Code()} /></pre>
+				class="scrollable overflow-x-scroll border border-neutral-300 bg-neutral-100 p-4 lg:overflow-x-auto dark:border-neutral-700 dark:bg-neutral-900"><code set:html={getTw3Code()} /></pre>
 		</div>
 		<div id="codeCss" class="hidden">
 			<div class="border border-b-0 border-neutral-300 px-4 py-2 italic dark:border-neutral-700">
 				tailwind.css
 			</div>
 			<pre
-				class="border border-neutral-300 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-900"><code set:html={getTw3CodeCss()} /></pre>
+				class="scrollable overflow-x-scroll border border-neutral-300 bg-neutral-100 p-4 lg:overflow-x-auto dark:border-neutral-700 dark:bg-neutral-900"><code set:html={getTw3CodeCss()} /></pre>
 		</div>
 	</div>
 </section>
