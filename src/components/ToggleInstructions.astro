@@ -6,15 +6,18 @@ import { Icon } from "astro-icon/components"
 	id="btnHideInstructions"
 	type="button"
 	class="text-users-500 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-users-500">
+	<span class="sr-only">Toggle instructions off/on</span>
 	<Icon
 		class="hidden size-6 group-[.hide-instructions]/instructions:block"
 		name="mdi:format-list-numbered"
 		title="Show instructional steps"
+		aria-hidden="true"
 	/>
 	<Icon
 		class="size-6 group-[.hide-instructions]/instructions:hidden"
 		name="mdi:hide"
 		title="Hide instructional steps"
+		aria-hidden="true"
 	/>
 </button>
 

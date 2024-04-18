@@ -18,7 +18,7 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 	id === "1" && (
 		<div
 			class:list={[
-				"border-b border-neutral-300 pb-2 text-center dark:border-neutral-600",
+				"mb-1 border-b border-neutral-300 pb-2 text-center dark:border-neutral-600",
 				{ "col-span-2": csType !== "tw" }
 			]}>
 			<div class="font-bold">{title}</div>
@@ -29,14 +29,16 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 <div data-cs-type={csType ? csType : null} class="row-span-6 grid grid-rows-subgrid gap-1">
 	<select
 		id=`select_${csType}_${id}`
-		class="border border-neutral-300 bg-white py-1.5 text-sm outline-none focus:border-users-500 focus:ring-users-500 lg:text-base dark:border-neutral-600 dark:bg-neutral-800">
+		class="border border-neutral-300 bg-white py-1.5 text-sm outline-none focus:border-users-500 focus:ring-users-500 lg:text-base dark:border-neutral-600 dark:bg-neutral-800"
+		aria-label=`select a ${title}`>
 		<slot name="csOptions" />
 	</select>
 	{
 		csType === "pcs" && (
 			<select
 				id={`select_${csType}_${id}_him`}
-				class="border border-neutral-300 bg-white py-1.5 text-sm outline-none focus:border-users-500 focus:ring-users-500 lg:text-base dark:border-neutral-600 dark:bg-neutral-800">
+				class="border border-neutral-300 bg-white py-1.5 text-sm outline-none focus:border-users-500 focus:ring-users-500 lg:text-base dark:border-neutral-600 dark:bg-neutral-800"
+				aria-label="select a hue interpolation method">
 				<slot name="himOptions" />
 			</select>
 		)
@@ -86,6 +88,7 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 					<Icon
 						class="size-6 text-users-500 peer-checked:hidden lg:size-8"
 						name="mdi:palette-outline"
+						aria-hidden="true"
 					/>
 					<span class="inline-block text-sm font-medium text-black peer-checked:hidden lg:text-base dark:text-white">
 						Copy
@@ -95,6 +98,7 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 					<Icon
 						class="hidden size-6 text-users-500 peer-checked:block lg:size-8"
 						name="mdi:palette"
+						aria-hidden="true"
 					/>
 					<span class="hidden text-sm font-medium text-black peer-checked:block lg:text-base dark:text-white">
 						Copied!
