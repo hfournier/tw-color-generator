@@ -6,6 +6,7 @@ export default {
 		extend: {
 			colors: {
 				users: {
+					text: "hsl(var(--color-users-text) / <alpha-value>)",
 					500: "hsl(var(--color-users-500) / <alpha-value>)",
 					s1: "hsl(var(--color-users-s1) / <alpha-value>)",
 					s15: "hsl(var(--color-users-s15) / <alpha-value>)"

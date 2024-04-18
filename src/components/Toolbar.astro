@@ -5,81 +5,82 @@ import { defaultColors } from "@utils/colors"
 const round0 = round(0)
 ---
 
-<section
-	class="flex flex-col py-2 sm:flex-row sm:items-center sm:divide-x-2 dark:divide-neutral-600">
-	<label class="flex items-center gap-2 py-2 pr-3 sm:py-0"
-		><div class="text-sm">Select a color</div>
-		<input
-			id="input_colorPicker"
-			type="color"
-			title="Pick me! Pick me!"
-			class="size-8 rounded-sm bg-transparent outline-none focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-users-500 sm:h-8 sm:w-6 md:size-8"
-			value={defaultColors.hex}
-		/>
-	</label>
-	<label class="flex items-center gap-2 py-2 sm:px-2 sm:py-0 md:px-3">
-		<div class="text-sm">Hex</div>
-		<input
-			id="input_colorHex"
-			class="w-[4.5rem] border-0 border-b-2 border-neutral-300 p-1 text-center outline-none selection:bg-users-500 selection:text-white invalid:border-2 invalid:border-red-500 focus:border-2 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
-			type="text"
-			title="Go ahead and Paste me!"
-			pattern="#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})"
-			value={defaultColors.hex}
-		/>
-	</label>
-	<div class="flex items-center gap-3 py-2 sm:px-2 sm:py-0 md:px-3">
-		<label class="flex items-center gap-2">
-			<div class="text-center text-sm">Hue (deg)</div>
+<section class="">
+	<div class="flex flex-col py-2 sm:flex-row sm:items-center sm:divide-x-2 dark:divide-neutral-600">
+		<label class="flex items-center gap-2 py-2 pr-3 sm:py-0"
+			><div class="text-sm">Select a color</div>
 			<input
-				id="input_colorHsl_h"
-				class="w-10 border-0 border-b-2 border-neutral-300 p-1 text-center invalid:border-red-500 disabled:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-300"
-				type="text"
-				min="0"
-				max="360"
-				disabled
-				value={round0(defaultColors.hsl.h)}
+				id="input_colorPicker"
+				type="color"
+				title="Pick me! Pick me!"
+				class="size-8 rounded-sm bg-transparent outline-none focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-users-500 sm:h-8 sm:w-6 md:size-8"
+				value={defaultColors.hex}
 			/>
 		</label>
-		<label class="flex items-center gap-2">
-			<div class="text-center text-sm">Saturation (%)</div>
+		<label class="flex items-center gap-2 py-2 sm:px-2 sm:py-0 md:px-3">
+			<div class="text-sm">Hex</div>
 			<input
-				id="input_colorHsl_s"
-				class="w-10 border-0 border-b-2 border-neutral-300 p-1 text-center invalid:border-red-500 disabled:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-300"
+				id="input_colorHex"
+				class="w-[4.5rem] border-0 border-b-2 border-neutral-300 p-1 text-center outline-none selection:bg-users-500 selection:text-white invalid:border-2 invalid:border-red-500 focus:border-2 focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800"
 				type="text"
-				min="0"
-				max="100"
-				disabled
-				value={round0(defaultColors.hsl.s * 100)}
+				title="Go ahead and Paste me!"
+				pattern="#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})"
+				value={defaultColors.hex}
 			/>
 		</label>
-		<label class="flex items-center gap-2">
-			<div class="text-center text-sm">Lightness (%)</div>
-			<input
-				id="input_colorHsl_l"
-				class="w-10 border-0 border-b-2 border-neutral-300 p-1 text-center invalid:border-red-500 disabled:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-300"
-				type="text"
-				min="0"
-				max="100"
-				disabled
-				value={round0(defaultColors.hsl.l * 100)}
-			/>
-		</label>
+		<div class="flex items-center gap-3 py-2 sm:px-2 sm:py-0 md:px-3">
+			<label class="flex items-center gap-2">
+				<div class="text-center text-sm">Hue (deg)</div>
+				<input
+					id="input_colorHsl_h"
+					class="w-10 border-0 border-b-2 border-neutral-300 p-1 text-center invalid:border-red-500 disabled:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-300"
+					type="text"
+					min="0"
+					max="360"
+					disabled
+					value={round0(defaultColors.hsl.h)}
+				/>
+			</label>
+			<label class="flex items-center gap-2">
+				<div class="text-center text-sm">Saturation (%)</div>
+				<input
+					id="input_colorHsl_s"
+					class="w-10 border-0 border-b-2 border-neutral-300 p-1 text-center invalid:border-red-500 disabled:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-300"
+					type="text"
+					min="0"
+					max="100"
+					disabled
+					value={round0(defaultColors.hsl.s * 100)}
+				/>
+			</label>
+			<label class="flex items-center gap-2">
+				<div class="text-center text-sm">Lightness (%)</div>
+				<input
+					id="input_colorHsl_l"
+					class="w-10 border-0 border-b-2 border-neutral-300 p-1 text-center invalid:border-red-500 disabled:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-300"
+					type="text"
+					min="0"
+					max="100"
+					disabled
+					value={round0(defaultColors.hsl.l * 100)}
+				/>
+			</label>
+		</div>
+		<div class="py-2 sm:px-2 sm:py-0 md:px-3">
+			<button
+				id="btn_reset"
+				type="button"
+				class="text-users-text rounded-sm bg-users-500 px-3 py-1 font-medium hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-users-500"
+				>Reset</button
+			>
+		</div>
+		<div id="errorMsg" class="px-3 text-red-500"></div>
 	</div>
-	<div class="py-2 sm:px-2 sm:py-0 md:px-3">
-		<button
-			id="btn_reset"
-			type="button"
-			class="rounded-sm bg-users-500 px-3 py-1 font-medium text-white hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-users-500"
-			>Reset</button
-		>
-	</div>
-	<div id="errorMsg" class="px-3 text-red-500"></div>
+	<hr class="hidden group-[.hide-instructions]/instructions:block dark:border-neutral-600" />
 </section>
-<hr class="hidden group-[.hide-instructions]/instructions:block dark:border-neutral-600" />
 
 <script>
-	import { formatHex, round, hsl } from "culori"
+	import { formatHex, round, hsl, wcagContrast } from "culori"
 	import {
 		updateShades,
 		type RectangularColorSpaceTypes,
@@ -176,9 +177,11 @@ const round0 = round(0)
 
 				hslColor.l = 0.5
 				colorHex_l_50 = formatHex(hslColor) as string
+				const contrastRatioWhite = wcagContrast(colorHex_l_50, "white")
+				const contrastRatioBlack = wcagContrast(colorHex_l_50, "black")
 				document.body.setAttribute(
 					"style",
-					`--color-users-500: ${hslColor.h}deg ${hslColor.s * 100}% ${hslColor.l * 100}%; --color-users-s1: ${hslColor.h}deg ${1}% ${hslColor.l * 100}%; --color-users-s15: ${hslColor.h}deg ${15}% ${hslColor.l * 100}%;`
+					`--color-users-text: none 0% ${contrastRatioBlack > contrastRatioWhite ? "0" : "100"}%; --color-users-500: ${hslColor.h}deg ${hslColor.s * 100}% ${hslColor.l * 100}%; --color-users-s1: ${hslColor.h}deg ${1}% ${hslColor.l * 100}%; --color-users-s15: ${hslColor.h}deg ${15}% ${hslColor.l * 100}%;`
 				)
 
 				const shadeCols = document.querySelectorAll<HTMLElement>("[data-cs-type]")

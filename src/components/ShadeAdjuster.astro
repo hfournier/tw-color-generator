@@ -35,6 +35,7 @@ const title = `${label} each shade incrementally from 500 to ${mode === "light" 
 		{max}
 		step="any"
 		{title}
-		{value}
+		value={value < min ? min : value > max ? max : value}
+		autocomplete="off"
 	/>
 </label>

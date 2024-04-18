@@ -4,6 +4,7 @@
 
 @layer base {
 	:root {
+		--color-users-text: none 0% 0%;
 		--color-users-500: 25deg 95% 50%;
 		--color-users-s1: 25deg 1% 50%;
 		--color-users-s15: 25deg 15% 50%;

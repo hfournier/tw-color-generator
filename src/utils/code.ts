@@ -89,6 +89,26 @@ export const getTw4CodeCss = (paletteColors?: PaletteColor[]) => {
 	}
 }
 
+export const getCodeCss = (paletteColors?: PaletteColor[]) => {
+	const twCode_start = `<span class="line"><span style="color: var(--color-code-entity)">:root</span><span style="color: var(--color-code-punctuation)"> {</span></span>\n`
+	const twCode_shades = paletteColors
+		? paletteColors
+				.map(
+					(paletteColor) =>
+						paletteColor.shades
+							.map(
+								(shade) =>
+									`<span class="line"><span style="color: var(--color-code-cssvar)">  --clr-${paletteColor.name}${shade.shade === "DEFAULT" ? "" : "-" + shade.shade}: </span><span style="color: var(--color-code-string);font-style:italic">${shade.color}</span><span style="color: var(--color-code-punctuation)">;</span></span>`
+							)
+							.join("\n") + "\n"
+				)
+				.join("\n")
+		: ""
+	const twCode_end = `<span class="line"><span style="color: var(--color-code-punctuation)">}</span></span>`
+
+	return twCode_start.concat(twCode_shades, twCode_end)
+}
+
 /**
  * Generate Tailwind CSS 3.x code (tailwind.css) based on palette colors.
  *

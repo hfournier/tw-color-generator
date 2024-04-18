@@ -18,7 +18,7 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 	id === "1" && (
 		<div
 			class:list={[
-				"border-b border-neutral-300 text-center dark:border-neutral-600",
+				"border-b border-neutral-300 pb-2 text-center dark:border-neutral-600",
 				{ "col-span-2": csType !== "tw" }
 			]}>
 			<div class="font-bold">{title}</div>
@@ -48,9 +48,9 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 				cs={defaultCs!}
 				id={`${csType}_${id}`}
 				mode="light"
-				min={colorOptions!.light.min * 100}
-				max={colorOptions!.light.max * 100}
-				value={colorOptions!.light.step * 100}
+				min={colorOptions!.light.min}
+				max={colorOptions!.light.max}
+				value={colorOptions!.light.step}
 			/>
 		)
 	}
@@ -64,16 +64,16 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 				cs={defaultCs!}
 				id={`${csType}_${id}`}
 				mode="dark"
-				min={colorOptions!.dark.min * 100}
-				max={colorOptions!.dark.max * 100}
-				value={colorOptions!.dark.step * 100}
+				min={colorOptions!.dark.min}
+				max={colorOptions!.dark.max}
+				value={colorOptions!.dark.step}
 			/>
 		)
 	}
 	{
 		csType !== "tw" && (
 			<label
-				class="row-start-6 mx-2 flex cursor-pointer items-center justify-center gap-2 rounded-sm border-2 border-users-500 py-1 shadow-sm hover:shadow-lg"
+				class="row-start-6 mx-2 flex cursor-pointer items-center justify-center gap-2 rounded-sm border-2 border-users-500 py-1 shadow hover:shadow-lg"
 				title="Copy this color space to your palette">
 				<input
 					id={`rdo_palette_${csType}_${id}`}
@@ -87,7 +87,7 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 						class="size-6 text-users-500 peer-checked:hidden lg:size-8"
 						name="mdi:palette-outline"
 					/>
-					<span class="inline-block text-sm font-medium text-users-500 peer-checked:hidden lg:text-base">
+					<span class="inline-block text-sm font-medium text-black peer-checked:hidden lg:text-base dark:text-white">
 						Copy
 					</span>
 				</>
@@ -96,7 +96,7 @@ const { id, csType, title, subTitle, defaultCs, colorOptions } = Astro.props
 						class="hidden size-6 text-users-500 peer-checked:block lg:size-8"
 						name="mdi:palette"
 					/>
-					<span class="hidden text-sm font-medium text-users-500 peer-checked:block lg:text-base">
+					<span class="hidden text-sm font-medium text-black peer-checked:block lg:text-base dark:text-white">
 						Copied!
 					</span>
 				</>

@@ -7,12 +7,13 @@ import { getTw3Code, getTw3CodeCss } from "@utils/code"
 	<div class="flex flex-col py-2 sm:flex-row sm:items-center sm:divide-x-2 dark:divide-neutral-600">
 		<div class="flex items-center gap-1 py-2">
 			<label class="flex items-center gap-2 pr-2 text-sm"
-				>Tailwind
+				>Tailwind version
 				<select
 					id="select_tw_version"
 					class="border border-neutral-300 bg-white text-sm outline-none focus:border-users-500 focus:ring-users-500 dark:border-neutral-600 dark:bg-neutral-800">
-					<option value="v3">Version 3.x</option>
-					<option value="v4">Version 4.x</option>
+					<option value="v3">3.x</option>
+					<option value="v4">4.x</option>
+					<option value="none">none</option>
 				</select>
 			</label>
 			<label class="flex items-center gap-1 px-2 text-sm"
@@ -62,7 +63,13 @@ import { getTw3Code, getTw3CodeCss } from "@utils/code"
 </section>
 
 <script>
-	import { getTw3CodeConfig, getTw3CodeCss, getTw3Code, getTw4CodeCss } from "@utils/code"
+	import {
+		getTw3CodeConfig,
+		getTw3CodeCss,
+		getTw3Code,
+		getTw4CodeCss,
+		getCodeCss
+	} from "@utils/code"
 	import { getCurrentColor, type LightnessColorSpaceTypes } from "@utils/colors"
 	import { converter, formatCss, formatHex, formatHsl, formatRgb, parse } from "culori"
 
@@ -227,16 +234,17 @@ import { getTw3Code, getTw3CodeCss } from "@utils/code"
 		if (select_tw_version.value === "v3") {
 			if (ck_use_vars.checked) {
 				// if (selectedOutput === "rgb" || selectedOutput === "hsl") {
-				codeConfig.getElementsByTagName("code")[0].innerHTML = getTw3CodeConfig(
-					selectedOutput,
-					colors
-				)
-				codeCss.getElementsByTagName("code")[0].innerHTML = getTw3CodeCss(selectedOutput, colors)
+				codeConfig.querySelector("code")!.innerHTML = getTw3CodeConfig(selectedOutput, colors)
+				codeCss.querySelector("code")!.innerHTML = getTw3CodeCss(selectedOutput, colors)
 			} else {
-				codeConfig.getElementsByTagName("code")[0].innerHTML = getTw3Code(colors)
+				codeConfig.querySelector("code")!.innerHTML = getTw3Code(colors)
 			}
+		} else if (select_tw_version.value === "v4") {
+			codeCss.querySelector("div")!.innerText = "tailwind.css"
+			codeCss.querySelector("code")!.innerHTML = getTw4CodeCss(colors)
 		} else {
-			codeCss.getElementsByTagName("code")[0].innerHTML = getTw4CodeCss(colors)
+			codeCss.querySelector("div")!.innerText = "style.css"
+			codeCss.querySelector("code")!.innerHTML = getCodeCss(colors)
 		}
 	}
 
