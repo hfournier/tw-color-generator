@@ -27,10 +27,7 @@
 
 		const hideInstructions = localStorage.getItem("hideInstructions")
 		if (hideInstructions === "true") {
-			const body = document.body
-			if (body) {
-				body.classList.add("hide-instructions")
-			}
+			document.documentElement.classList.add("hide-instructions")
 		}
 	</script>
 </head>

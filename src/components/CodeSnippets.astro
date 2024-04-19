@@ -166,18 +166,6 @@ import { getTw3Code, getTw3CodeCss } from "@utils/code"
 	}
 
 	/**
-	 * Converts the color value from the specified color space to another format.
-	 *
-	 * @param {LightnessColorSpaceTypes} cs - The color space type to convert to.
-	 * @param {string} color - The color value to convert.
-	 * @return {string} The converted color value.
-	 */
-	const convertColor = (cs: LightnessColorSpaceTypes, color: string) => {
-		let cv = converter(cs)
-		return cs === "hsl" ? formatHsl(cv(color)) : formatCss(cv(color))
-	}
-
-	/**
 	 * Updates the code display based on the selected color values.
 	 */
 	const updateCode = () => {

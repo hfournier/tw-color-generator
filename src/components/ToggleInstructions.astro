@@ -24,10 +24,7 @@ import { Icon } from "astro-icon/components"
 <script>
 	const btnHideInstructions = document.getElementById("btnHideInstructions") as HTMLButtonElement
 	btnHideInstructions.addEventListener("click", () => {
-		const body = document.body
-		if (body) {
-			const hide = body.classList.toggle("hide-instructions") ? "true" : "false"
-			localStorage.setItem("hideInstructions", hide)
-		}
+		const hide = document.documentElement.classList.toggle("hide-instructions") ? "true" : "false"
+		localStorage.setItem("hideInstructions", hide)
 	})
 </script>

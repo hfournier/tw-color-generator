@@ -1,23 +1,17 @@
 ---
-import { colorShades, defaultColors, twColors, twGrays } from "@utils/colors"
+import { colorShades, defaultColors, twColors } from "@utils/colors"
 import ShadeColumn from "./ShadeColumn.astro"
 ---
 
 <ShadeColumn id="1" csType="tw" title="Tailwind CSS Colors">
 	<Fragment slot="csOptions">
-		<optgroup label="Colors">
-			{
-				twColors.map((twColor) => (
-					<option selected={twColor.name === defaultColors.tw_color ? true : null}>
-						{twColor.name}
-					</option>
-				))
-			}
-		</optgroup>
-		<hr class="sr-only my-2" />
-		<optgroup label="Grays">
-			{twGrays.map((twGray) => <option>{twGray}</option>)}
-		</optgroup>
+		{
+			twColors.map((twColor) => (
+				<option selected={twColor.name === defaultColors.tw_color ? true : null}>
+					{twColor.name}
+				</option>
+			))
+		}
 	</Fragment>
 	<Fragment slot="shadeItems">
 		{
@@ -44,11 +38,5 @@ import ShadeColumn from "./ShadeColumn.astro"
 
 	select_tw_colors.addEventListener("change", () => {
 		updateTwColors()
-	})
-
-	select_tw_colors.form?.addEventListener("reset", () => {
-		setTimeout(() => {
-			updateTwColors()
-		}, 10)
 	})
 </script>
