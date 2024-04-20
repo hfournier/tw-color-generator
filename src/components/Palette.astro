@@ -159,7 +159,7 @@ import { colorSchemes } from "@utils/colors"
 			const selectedColorScheme = select_color_scheme.options[select_color_scheme.selectedIndex]
 				.value as ColorSchemeTypes
 
-			if (selectedCS === "hwb") {
+			if (selectedCS === "hwb" && !selectedHim) {
 				rg_grayish_saturation.parentElement?.classList.remove("flex")
 				rg_grayish_saturation.parentElement?.classList.add("hidden")
 				rg_grayish_bw_offset.parentElement?.classList.remove("hidden")
@@ -332,7 +332,7 @@ import { colorSchemes } from "@utils/colors"
 						ul_palettes![i++].innerHTML =
 							getColorShades(formatHex(color2), selectedCS)
 								.map((colorShade) => {
-									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
+									return `<li class="flex aspect-[5/1] items-center justify-center" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
 								})
 								.join("\n") + "\n"
 					} else {
@@ -340,9 +340,9 @@ import { colorSchemes } from "@utils/colors"
 							getShades(getColorMixOptions()[selectedCS as ColorSpaceTypes])
 								.map((colorShade) => {
 									if (selectedHim !== undefined) {
-										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+										return `<li class="flex aspect-[5/1] items-center justify-center" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
 									} else {
-										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS}, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+										return `<li class="flex aspect-[5/1] items-center justify-center" style="background-color: color-mix(in ${selectedCS}, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(color2!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
 									}
 								})
 								.join("\n") + "\n"
@@ -358,7 +358,7 @@ import { colorSchemes } from "@utils/colors"
 						ul_palettes![i++].innerHTML =
 							getColorShades(formatHex(color3), selectedCS)
 								.map((colorShade) => {
-									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
+									return `<li class="flex aspect-[5/1] items-center justify-center" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
 								})
 								.join("\n") + "\n"
 					} else {
@@ -366,9 +366,9 @@ import { colorSchemes } from "@utils/colors"
 							getShades(getColorMixOptions()[selectedCS as ColorSpaceTypes])
 								.map((colorShade) => {
 									if (selectedHim !== undefined) {
-										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+										return `<li class="flex aspect-[5/1] items-center justify-center" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
 									} else {
-										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS}, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+										return `<li class="flex aspect-[5/1] items-center justify-center" style="background-color: color-mix(in ${selectedCS}, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(color3!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
 									}
 								})
 								.join("\n") + "\n"
@@ -384,7 +384,7 @@ import { colorSchemes } from "@utils/colors"
 						ul_palettes![i++].innerHTML =
 							getColorShades(formatHex(color4), selectedCS)
 								.map((colorShade) => {
-									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
+									return `<li class="flex aspect-[5/1] items-center justify-center" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
 								})
 								.join("\n") + "\n"
 					} else {
@@ -392,9 +392,9 @@ import { colorSchemes } from "@utils/colors"
 							getShades(getColorMixOptions()[selectedCS as ColorSpaceTypes])
 								.map((colorShade) => {
 									if (selectedHim !== undefined) {
-										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+										return `<li class="flex aspect-[5/1] items-center justify-center" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
 									} else {
-										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS}, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+										return `<li class="flex aspect-[5/1] items-center justify-center" style="background-color: color-mix(in ${selectedCS}, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(color4!)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
 									}
 								})
 								.join("\n") + "\n"
@@ -418,7 +418,7 @@ import { colorSchemes } from "@utils/colors"
 								selectedCS === "hwb" ? +rg_grayish_bw_offset.value : undefined
 							)
 								.map((colorShade) => {
-									return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
+									return `<li class="flex aspect-[5/1] items-center justify-center" style="${colorShade.color ? "background-color: " + formatCss(colorShade.color) : null}" title="${formatColor(colorShade.color!)}">${colorShade.shade}</li>`
 								})
 								.join("\n") + "\n"
 					} else {
@@ -426,9 +426,9 @@ import { colorSchemes } from "@utils/colors"
 							getShades(getColorMixOptions()[selectedCS as ColorSpaceTypes])
 								.map((colorShade) => {
 									if (selectedHim !== undefined) {
-										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+										return `<li class="flex aspect-[5/1] items-center justify-center" style="background-color: color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS} ${selectedHim} hue, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
 									} else {
-										return `<li class="flex aspect-[5/1] items-center justify-center ${colorShade.shade < 400 ? "text-black" : "text-white"}" style="background-color: color-mix(in ${selectedCS}, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
+										return `<li class="flex aspect-[5/1] items-center justify-center" style="background-color: color-mix(in ${selectedCS}, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)" title="color-mix(in ${selectedCS}, ${formatHex(grayishColor500)}, ${colorShade.shade <= 500 ? "white" : "black"} ${colorShade.shade <= 500 ? colorShade.w * 100 : colorShade.b * 100}%)">${colorShade.shade}</li>`
 									}
 								})
 								.join("\n") + "\n"

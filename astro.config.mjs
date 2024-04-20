@@ -11,7 +11,7 @@ export default defineConfig({
 		}),
 		icon({
 			include: {
-				mdi: ["format-list-numbered", "hide", "palette", "palette-outline"]
+				mdi: ["content-copy", "format-list-numbered", "hide", "palette", "palette-outline"]
 			}
 		})
 	]
