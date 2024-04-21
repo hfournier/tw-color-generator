@@ -25,6 +25,7 @@ const round0 = round(0)
 				type="text"
 				title="Go ahead and Paste me!"
 				pattern="#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})"
+				maxlength="7"
 				value={defaultColors.hex}
 			/>
 		</label>
@@ -74,7 +75,7 @@ const round0 = round(0)
 				>Reset</button
 			>
 		</div>
-		<div id="errorMsg" class="px-3 text-red-500"></div>
+		<div id="errorMsg" class="px-3 text-sm text-red-600 dark:text-red-400"></div>
 	</div>
 	<hr class="hidden group-[.hide-instructions]/instructions:block dark:border-neutral-600" />
 </section>
@@ -113,23 +114,41 @@ const round0 = round(0)
 	input_colorPicker.addEventListener("change", (e) => updateColor(e.target as HTMLInputElement))
 	input_colorHex.addEventListener("input", (e) => updateColor(e.target as HTMLInputElement))
 
+	const setErrorMsg = (msg: string) => {
+		div_errorMsg.innerText = msg
+		setTimeout(() => {
+			div_errorMsg.innerText = ""
+		}, 5000)
+	}
+
 	/**
 	 * When something is pasted in colorHex, verify that it's a valid hex color and update all the colors
 	 */
 	input_colorHex.addEventListener("paste", (e: ClipboardEvent) => {
-		e.preventDefault()
+		const hexRegExp = new RegExp(/#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{3}/)
+		// /[#a-fA-F0-9]+/
 		let clipboardText = e.clipboardData?.getData("text/plain")
-		if (!clipboardText?.startsWith("#")) {
-			clipboardText = `#${clipboardText}`
-		}
-		const match = clipboardText?.match(/#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/)
-		if (match) {
-			input_colorPicker.value = clipboardText
-			updateColor(input_colorPicker as HTMLInputElement)
+		if (clipboardText !== undefined && clipboardText.length > 0) {
+			if (clipboardText.length > 7) {
+				setErrorMsg(
+					"Invalid color input. Hex color cannot be longer than 7 characters. Alpha values are not accepted"
+				)
+				e.preventDefault()
+				return false
+			}
+		} else if (clipboardText?.length === 7) {
+			const match = clipboardText.match(hexRegExp)
+			if (!match) {
+				setErrorMsg("Invalid color code. Only valid hex color codes (e.g. #000000) are accepted.")
+				e.preventDefault()
+				return false
+			}
 		} else {
-			alert("Invalid color code. Only valid hex color codes ('#000000') are accepted.")
+			setTimeout(() => {
+				updateColor(input_colorHex as HTMLInputElement)
+			}, 10)
+			return true
 		}
-		return true
 	})
 
 	/**

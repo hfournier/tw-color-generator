@@ -515,7 +515,6 @@ export const updateTextColor = (li: HTMLLIElement) => {
  */
 export const updateTwColors = () => {
 	const select_tw_colors = document.getElementById("select_tw_1") as HTMLSelectElement
-	console.log(select_tw_colors.options)
 	const previousColor = select_tw_colors.dataset.color
 	const ul_tw_colors = document.getElementById("ul_tw_1") as HTMLUListElement
 	colorShades.map((colorShade, i) => {
